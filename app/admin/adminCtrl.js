@@ -17,7 +17,7 @@
                 $location.path('admin')
             }
 
-            //$scope.username = $rootScope.globals.currentUser.user_name;
+            $scope.username = $rootScope.globals.currentUser.user_name;
 
             //Listen viewContentLoaded event
             $scope.$on('$viewContentLoaded', function () {
