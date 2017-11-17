@@ -10,15 +10,12 @@ angular.module('Authentication')
             service.Login = function (user_name, password, service, callback) {
                 console.log(Base64.encode(password)+" heyy");
                 //************************Edit here when backend is ready**********************
-
                 //$http.get(config.ip + '/api/LogIn?username=' + user_name + '&password=' + Base64.encode(password))
                 $http.get(config.ip + '/api/LogIn?username=' + user_name + '&password=' + password)
                 .success(function (response) {
                     console.log(response);
                     callback(response);
                 });
-           
-
 
             };
 
@@ -35,14 +32,14 @@ angular.module('Authentication')
                     usertem: user
                 };
 
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; // jshint ignore:line
+                //$http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; // jshint ignore:line
                 $cookieStore.put('globals', $rootScope.globals);
             };
 
             service.ClearCredentials = function () {
                 $rootScope.globals = {};
                 $cookieStore.remove('globals');
-                $http.defaults.headers.common.Authorization = 'Basic ';
+               //$http.defaults.headers.common.Authorization = 'Basic ';
             };
 
             return service;
