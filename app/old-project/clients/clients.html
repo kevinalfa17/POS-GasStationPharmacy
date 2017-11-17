@@ -1,0 +1,126 @@
+
+<div>
+    <div class="header">
+        <h2><strong>Clients</strong> </h2>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-12 portlets">
+            <div class="panel">
+                <div class="panel-header panel-controls">
+                    <h3><i class="fa fa-table"></i> <strong>Clients</strong> Table</h3>
+                </div>
+                <div class="panel-content">
+                    <!--HEADER WITH BASIC INFO AND ADD BUTTON-->
+                    <p>Here you can manage clients easily: add new row, edit or remove existing data.</p>
+                    <div class="m-b-20">
+                        <div class="btn-group">
+                            <button id="table-edit_new" class="btn btn-sm btn-dark" ng-click="addNewLine()"><i class="fa fa-plus"></i>{{newLineText}}</button>
+                        </div>
+                    </div>
+                    <!--SELECT NUMBER OF ROWS AND SEARCH INPUT-->
+                    <div class="row" style="display: block;">
+                        <div class="col-md-6 no-padding">
+                            <label>
+                                <div class="select2-container form-control">
+                                    <select ng-model="select" ng-options="option.value for option in options" class="form-control">
+                                        
+                                    </select>
+                                </div>
+                            </label>
+                        </div>
+    
+                        <div class="col-md-6 no-padding-2">
+                            <label>
+                                <input placeholder="Search..." ng-model="search" type="search" class="form-control" />
+                            </label>
+                        </div>
+                    </div>
+
+                    <!--TABLE-->
+                    <table class="table table-hover dataTable" style = "overflow:visible" id="table-editable">
+                        <thead>
+                            <tr>
+                                <th ng-repeat="title in header">{{title}}</th>
+                                <th class="text-right" style="width:100px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr ng-show="addingRow">
+
+                                <td><input type="text" class="form-control small" ng-model="newRowModels[0]" ui-mask="999999999" ui-mask-placeholder ui-mask-placeholder-char="_"></td>
+                                <td><input type="text" class="form-control small" ng-model="newRowModels[1]"></td>
+                                <td><input type="text" class="form-control small" ng-model="newRowModels[2]"></td>
+                                <td><input type="text" class="form-control small" ng-model="newRowModels[3]"></td>
+                                <td><input type="text" class="form-control small" ng-model="newRowModels[4]"></td>
+                                <td><input type="date" class="small" ng-model="newRowModels[5]" required="required"></td>
+                                <td> <input type="text" class="form-control small phone" ng-model="newRowModels[6]" ui-mask="99-99-99-99" ui-mask-placeholder ui-mask-placeholder-char="_"></td>
+                                <td><input type="text" class="form-control small" ng-model="newRowModels[7]"></td>
+                                <td><input type="text" class="form-control small" ng-model="newRowModels[8]"></td>
+                                <td></td>
+
+                                <td class="text-right">
+                                    <a class="edit btn btn-sm btn-success" ng-click="add()" href="javascript:;">Save</a>
+                                    <a class="delete btn btn-sm btn-danger" ng-click="cancel()" href="javascript:;"><i class="icons-office-52"></i></a>
+                                </td>
+                            </tr>
+
+                            <tr ng-repeat="item in getDataSource()" ng-if="showRow($index)">
+                                <td><input type="text" class="form-control small" ng-model="model[0]" ng-show="editable($index)" ui-mask="999999999" ui-mask-placeholder ui-mask-placeholder-char="_"><p ng-show="!editable($index)">{{item.id_client}}</p></td>
+                                <td><input type="text" class="form-control small" ng-model="model[1]" ng-show="editable($index)"><p ng-show="!editable($index)">{{item.first_name}}</p></td>
+                                <td><input type="text" class="form-control small" ng-model="model[2]" ng-show="editable($index)"><p ng-show="!editable($index)">{{item.second_name}}</p></td>
+                                <td><input type="text" class="form-control small" ng-model="model[3]" ng-show="editable($index)"><p ng-show="!editable($index)">{{item.first_last_name}}</p></td>
+                                <td><input type="text" class="form-control small" ng-model="model[4]" ng-show="editable($index)"><p ng-show="!editable($index)">{{item.second_last_name}}</p></td>
+                                <td><input type="date" class="small" ng-model="model[5]" ng-show="editable($index)" required="required" value ="{{item.birthdate}}"><p ng-show="!editable($index)">{{formatDate(item.birthdate)}}</p></td>
+                                
+                                <td>
+                                    <input type="text" class="form-control small phone" ng-model="model[6]" ng-show="editable($index)" ui-mask="99-99-99-99" ui-mask-placeholder ui-mask-placeholder-char="_">
+                                    <p ng-show="!editable($index)">{{item.phone}}</p>
+                                </td>
+                                <td><input type="text" class="form-control small" ng-model="model[7]" ng-show="editable($index)"><p ng-show="!editable($index)">{{item.user_name}}</p></td>
+                                <td><input type="text" class="form-control small" ng-model="model[8]" ng-show="editable($index)"><p ng-show="!editable($index)">{{item.residence}}</p></td>
+                                <td><p ng-show="!editable($index)"><a href="#/clients/{{item.id_client}}">See</p></td>
+                                <td class="text-right">
+                                    <a class="edit btn btn-sm btn-default" ng-click="edit($index,item.id_client,item.first_name, item.second_name, item.first_last_name, item.second_last_name, 
+                                    item.birthdate, item.phone, item.user_name,item.residence, item.diseases)" ng-show="!editable($index)" href="javascript:;"><i class="icon-note"></i></a>
+
+                                    <a class="edit btn btn-sm btn-success" ng-click="save($index,item.id_client,item.first_name, item.second_name, item.first_last_name, item.second_last_name, 
+                                    item.birthdate, item.phone, item.user_name,item.residence, item.diseases,item.index)" ng-show="editable($index)" href="javascript:;">Save</a>
+                                    <a class="delete btn btn-sm btn-danger" ng-click="remove($index,item.index)" ng-show="!editable($index)" href="javascript:;"><i class="icons-office-52"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!--END TABLE-->
+
+                    <!--PAGINATION ROW-->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="dataTables_info" id="DataTables_Table_2_info" role="status" aria-live="polite" ng-show="search == ''">Showing {{from()}} to {{to()}} of {{items.length}} entries</div>
+                            <div class="dataTables_info" id="DataTables_Table_2_info" role="status" aria-live="polite" ng-show="search !== ''">Showing search results</div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_2_paginate">
+                                <ul class="pagination">
+                                    <li class="paginate_button previous" ng-click="changePage(currentPage-1)" ng-show="currentPage>1" aria-controls="DataTables_Table_2"
+                                        tabindex="0" id="DataTables_Table_2_previous"><a href=""><i class="fa fa-angle-left"></i></a></li>
+
+                                    <li class="paginate_button" ng-repeat="page in pages" ng-click="changePage(page)" ng-class="{'active': page == currentPage}"
+                                        aria-controls="DataTables_Table_2" tabindex="0"><a href="">{{page}}</a></li>
+
+                                    <li class="paginate_button next" ng-click="changePage(currentPage+1)" ng-show="currentPage!==totalPages" aria-controls="DataTables_Table_2"
+                                        tabindex="0" id="DataTables_Table_2_next"><a href=""><i class="fa fa-angle-right"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

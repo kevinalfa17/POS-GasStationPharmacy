@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <!-- HEAD SECTION -->
+    <title>Gas Station Pharmacy</title>
+    <link rel="shortcut icon" href="../../assets/global/images/favicon.png" type="image/png">
+    <!-- CSS ASSETS-->
+    <link href="../../assets/global/css/style.css" rel="stylesheet">
+    <link href="../../assets/global/css/theme.css" rel="stylesheet">
+    <link href="../../assets/global/css/ui.css" rel="stylesheet">
+
+    <!-- PLUGINS ASSETS-->
+    <link href="../../assets/global/css/style.css" rel="stylesheet">
+    <link href="../../assets/global/css/theme.css" rel="stylesheet">
+    <link href="../../assets/global/css/ui.css" rel="stylesheet">
+    <link href="../../assets/global/plugins/metrojs/metrojs.min.css" rel="stylesheet">
+    <link href="../../assets/global/plugins/slick/slick.css" rel="stylesheet">
+    <link href="../../assets/global/plugins/icheck/skins/all.css" rel="stylesheet">
+    <link href="../../assets/global/plugins/bootstrap-tags-input/bootstrap-tagsinput.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/rateit/rateit.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/colorpicker/spectrum.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/step-form-wizard/css/step-form-wizard.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/step-form-wizard/plugins/parsley/parsley.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/ion-slider/ion.rangeSlider.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/ion-slider/style.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/bootstrap-loading/lada.min.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/cke-editor/skins/bootstrapck/editor.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/summernote/summernote.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/cropper/cropper.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/magnific/magnific-popup.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/hover-effects/hover-effects.min.css" rel="stylesheet">
+    <link href="../../assets/global/plugins/fullcalendar/fullcalendar.min.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/prettify/prettify.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/jstree/dist/themes/default/style.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/datatables/dataTables.min.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/dropzone/dropzone.min.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/input-text/style.min.css" rel="stylesheet" />
+    <link href="../../assets/global/plugins/font-awesome-animation/font-awesome-animation.min.css" rel="stylesheet" />
+
+
+    <!-- ANGULARJS STYLE -->
+    <link href="../../css/angular-theme.css" rel="stylesheet">
+    <!-- LAYOUT STYLE -->
+    <link href="../../assets/admin/layout1/css/layout.css" rel="stylesheet">
+    <!-- SCRIPTS -->
+    <script src="../../assets/global/plugins/modernizr/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+
+
+</head>
+
+<!-- BEGIN BODY -->
+
+<body ng-app="newApp" class="fixed-topbar fixed-sidebar theme-sdtl color-default" ng-controller="adminCtrl">
+
+    <!-- BEGIN PAGE SPINNER -->
+    <div ng-spinner-loader class="page-spinner-loader">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <!-- END PAGE SPINNER -->
+
+
+    <!-- BEGIN NG VIEW-->
+
+    <section>
+
+        <!-- BEGIN SIDEBAR -->
+        <div class="sidebar">
+
+            <!-- BEGIN LOGO -->
+            <div class="logopanel">
+
+                <h1><a href="#/admin">GS Pharmacy</a></h1>
+            </div>
+            <!-- END LOGO -->
+
+            <div class="sidebar-inner">
+                <div class="sidebar-top">
+
+                    <!-- START TOP ELEMENT: PROFILE DATA -->
+                    <div class="userlogged clearfix">
+                        <i class="icon icons-faces-users-01"></i>
+                        <div class="user-details">
+                            <h4>{{username}}</h4>
+                            <span>Admin</span>
+                        </div>
+                    </div>
+                    <!-- END TOP ELEMENT: PROFILE DATA -->
+
+                </div>
+
+                <div class="menu-title">
+                    Navigation
+                </div>
+
+                <!-- START SIDEBAR MENU -->
+
+                <ul class="nav nav-sidebar">
+                    <li ng-class="{ active  : isActive('/admin')}"><a href="#/admin"><i class="icon-home"></i><span>Home</span></a></li>
+                    <li ng-class="{ active  : isActive('/clients')}"><a href="#/clients"><i class="fa fa-users"></i><span>Clients</span></a></li>
+                    <li ng-class="{ active  : isActive('/employees')}"><a href="#/employees"><i class="fa fa-stethoscope"></i><span>Employees</span></a></li>
+                    <li ng-class="{ active  : isActive('/drugs')}"><a href="#/drugs"><i class="fa fa-medkit"></i><span>Drugs</span></a></li>
+                    <li ng-class="{ active  : isActive('/subsidiary')}"><a href="#/subsidiary"><i class="fa fa-hospital-o"></i><span>Subsidiaries</span></a></li>
+                    <li ng-class="{ active  : isActive('/roles')}"><a href="#/roles"><i class="icon-bulb"></i><span>Roles</span></a></li>
+
+                    <li ng-class="{ active  : isActive('/houses')}"><a href="#/houses"><i class="fa fa-h-square"></i><span>Houses</span></a></li>
+                    <li ng-class="{ active  : isActive('/ailments')}"><a href="#/ailments"><i class="fa fa-heartbeat"></i><span>Ailments</span></a></li>
+
+                    <!--START STADISTICS-->
+                    <li class="nav-parent">
+                        <a href="#/admin"><i class="fa fa-bar-chart"></i><span>Stadistics</span> <span class="fa arrow"></span></a>
+                        <ul class="children collapse">
+                            <li ng-class="{ active  : isActive('/stadistics/products') || isActive('/stadistics')}"><a href="#/stadistics/products">Products</a></li>
+                            <li ng-class="{ active  : isActive('/stadistics/companies')}"><a href="#/stadistics/companies">Companies</a></li>
+                        </ul>
+                    </li>
+                    <!--END STADISTICS-->
+
+                </ul>
+                <!-- END SIDEBAR MENU -->
+
+                <!-- START FOOTER SIDEBAR MENU -->
+                <div class="sidebar-footer clearfix">
+                    <a class="pull-left footer-settings" href="#/admin" data-rel="tooltip" data-placement="top" data-original-title="Settings">
+                        <i class="icon-settings"></i>
+                    </a>
+
+                    <a class="pull-left btn-effect" href="#/admin" data-rel="tooltip" data-placement="top" data-original-title="Logout">
+                        <i class="icon-power"></i>
+                    </a>
+                </div>
+                <!-- END FOOTER SIDEBAR MENU -->
+
+            </div>
+        </div>
+        <!-- END SIDEBAR -->
+
+        <!-- BEGIN MAIN CONTENT -->
+        <div class="main-content">
+            <!-- BEGIN TOP BAR MENU -->
+            <div class="topbar">
+
+                <div class="header-left">
+                    <div class="topnav">
+                        <a class="menutoggle" href="" data-toggle="sidebar-collapsed"><span class="menu__handle"><span>Menu</span></span></a>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <ul class="header-menu nav navbar-nav">
+                        <!-- BEGIN USERPROFILE DROPDOWN -->
+                        <li class="dropdown" id="user-header">
+                            <a href="" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+
+                                <span class="username">Hi, {{username}}</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="#/admin-profile"><i class="icon-settings"></i><span>Account Settings</span></a>
+                                </li>
+                                <li>
+                                    <a ng-click="logout()"><i class="icon-logout"></i><span>Logout</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- END USERPROFILE DROPDOWN -->
+                    </ul>
+                </div>
+            </div>
+            <!-- END TOP BAR MENU -->
+
+            <!-- BEGIN PAGE CONTENT -->
+
+
+            <div ng-view class="at-view-slide-in-left page-content" ng-view-class=" page-wizard : /forms-wizard , page-thin : / , page-contact : /pages-contact, 
+                    page-profil : /user-profile, page-app : /user-profile">
+
+            </div>
+
+            <!-- END PAGE CONTENT -->
+        </div>
+        <!-- END MAIN CONTENT -->
+    </section>
+
+    <!-- END NG VIEW-->
+
+    <!-- PRELOADER -->
+    <div class="loader-overlay">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+    </div>
+
+
+
+    <!-- BEGIN ANGULARJS SCRIPTS -->
+    <script src="../../plugins/angular/angular.js"></script>
+    <script src="../../plugins/json3/lib/json3.js"></script>
+    <script src="../../plugins/angular-resource/angular-resource.js"></script>
+    <script src="../../plugins/angular-cookies/angular-cookies.js"></script>
+    <script src="../../plugins/angular-sanitize/angular-sanitize.js"></script>
+    <script src="../../plugins/angular-animate/angular-animate.js"></script>
+    <script src="../../plugins/angular-touch/angular-touch.js"></script>
+    <script src="../../plugins/angular-route/angular-route.js"></script>
+    <script src="../../plugins/angular-bootstrap/ui-bootstrap-tpls-0.12.1.js"></script>
+    <script src="../../plugins/angular-uimask/dist/mask.js"></script>
+
+
+    <script src="../app.js"></script>
+    <script src="../../directives/ngViewClass.js"></script>
+    <!-- END ANGULARJS SCRIPTS -->
+
+    <script src="../../assets/global/plugins/jquery/jquery-1.11.1.min.js"></script>
+    <script src="../../assets/global/plugins/jquery/jquery-migrate-1.2.1.min.js"></script>
+    <script src="../../assets/global/plugins/jquery-ui/jquery-ui-1.11.2.min.js"></script>
+    <script src="../../assets/global/plugins/gsap/main-gsap.min.js"></script>
+    <script src="../../assets/global/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../assets/global/plugins/jquery-cookies/jquery.cookies.min.js"></script>
+    <script src="../../assets/global/plugins/jquery-block-ui/jquery.blockUI.min.js"></script>
+    <script src="../../assets/global/plugins/bootbox/bootbox.min.js"></script>
+    <script src="../../assets/global/plugins/mcustom-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="../../assets/global/plugins/bootstrap-dropdown/bootstrap-hover-dropdown.min.js"></script>
+    <script src="../../assets/global/plugins/charts-sparkline/sparkline.min.js"></script>
+    <script src="../../assets/global/plugins/retina/retina.min.js"></script>
+    <script src="../../assets/global/plugins/select2/select2.min.js"></script>
+    <script src="../../assets/global/plugins/icheck/icheck.min.js"></script>
+    <script src="../../assets/global/plugins/backstretch/backstretch.min.js"></script>
+    <script src="../../assets/global/plugins/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <script src="../../assets/global/js/sidebar_hover.js"></script>
+    <script src="../../assets/global/js/widgets/notes.js"></script>
+    <script src="../../assets/global/js/pages/search.js"></script>
+    <script src="../../assets/global/plugins/quickSearch/quicksearch.js"></script>
+    <script src="../../assets/global/plugins/slick/slick.js"></script>
+    <script src="../../assets/global/plugins/icheck/icheck.js"></script>
+    <script src="../../assets/global/plugins/switchery/switchery.js"></script>
+    <script src="../../assets/global/plugins/timepicker/jquery-ui-timepicker-addon.js"></script>
+    <script src="../../assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="../../assets/global/plugins/colorpicker/spectrum.js"></script>
+    <script src="../../assets/global/plugins/touchspin/jquery.bootstrap-touchspin.js"></script>
+    <script src="../../assets/global/plugins/step-form-wizard/js/step-form-wizard.js"></script>
+    <script src="../../assets/global/plugins/step-form-wizard/plugins/parsley/parsley.min.js"></script>
+    <script src="../../assets/global/plugins/jquery-validation/jquery.validate.js"></script>
+    <script src="../../assets/global/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+    <script src="../../assets/global/plugins/ion-slider/ion.rangeSlider.js"></script>
+    <script src="../../assets/global/plugins/bootstrap/js/jasny-bootstrap.js"></script>
+    <script src="../../assets/global/plugins/isotope/isotope.pkgd.min.js"></script>
+    <script src="../../assets/global/plugins/magnific/jquery.magnific-popup.js"></script>
+    <script src="../../assets/global/plugins/moment/moment.min.js"></script>
+    <script src="../../assets/global/plugins/fullcalendar/fullcalendar.min.js"></script>
+    <script src="../../assets/global/plugins/countup/countUp.js"></script>
+    <script src="../../assets/global/plugins/bootstrap-loading/lada.min.js"></script>
+    <script src="../../assets/global/plugins/jstree/jstree.js"></script>
+    <script src="../../assets/global/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../assets/global/plugins/typed/typed.js"></script>
+    <script src="../../assets/global/plugins/cke-editor/ckeditor.js"></script>
+    <script src="../../assets/global/plugins/cke-editor/config.js"></script>
+    <script src="../../assets/global/plugins/cke-editor/styles.js"></script>
+    <script src="../../assets/global/plugins/cke-editor/adapters/adapters.min.js"></script>
+    <script src="../../assets/global/plugins/cke-editor/lang/en.js"></script>
+    <script src="../../assets/global/plugins/cke-editor/skins/bootstrapck/skin.js"></script>
+    <script src="../../assets/global/plugins/summernote/summernote.js"></script>
+    <script src="../../assets/global/plugins/prettify/prettify.js"></script>
+    <script src="../../assets/global/plugins/dropzone/dropzone.min.js"></script>
+    <script src="../../assets/global/plugins/idle-timeout/jquery.idletimeout.min.js"></script>
+    <script src="../../assets/global/plugins/idle-timeout/jquery.idletimer.min.js"></script>
+    <script src="../../assets/global/plugins/cropper/cropper.js"></script>
+    <script src="../../assets/global/plugins/noty/jquery.noty.packaged.min.js"></script>
+    <script src="../../assets/global/plugins/bootstrap-editable/js/bootstrap-editable.min.js"></script>
+    <script src="../../assets/global/plugins/bootstrap-context-menu/bootstrap-contextmenu.min.js"></script>
+    <script src="../../assets/global/plugins/multidatepicker/multidatespicker.min.js"></script>
+    <script src="../../assets/global/js/widgets/todo_list.js"></script>
+    <script src="../../assets/global/plugins/metrojs/metrojs.min.js"></script>
+    <script src="../../assets/global/plugins/charts-chartjs/Chart.min.js"></script>
+    <script src="../../assets/global/plugins/charts-highstock/js/highstock.min.js"></script>
+    <script src="../../assets/global/plugins/charts-highstock/js/modules/exporting.min.js"></script>
+    <script src="../../assets/global/plugins/skycons/skycons.min.js"></script>
+    <script src="../../assets/global/plugins/simple-weather/jquery.simpleWeather.js"></script>
+    <script src="../../assets/global/plugins/bootstrap-tags-input/bootstrap-tagsinput.js"></script>
+    <script src="../../assets/global/plugins/rateit/jquery.rateit.min.js"></script>
+    <script src="../../assets/global/plugins/charts-highstock/js/highcharts-more.min.js"></script>
+    <script src="../../assets/global/plugins/charts-highstock/js/modules/exporting.min.js"></script>
+    <script src="../../assets/global/plugins/autosize/autosize.min.js"></script>
+    <script src="../../assets/global/js/widgets/widget_weather.js"></script>
+    <script src="../../assets/global/js/pages/ecommerce.js"></script>
+
+    <!-- BEGIN CUSTOM ANGULARJS SCRIPTS -->
+    <script src="../../js/user_service.js"></script>
+    <script src="../../js/authentication_service.js"></script>
+    <script src="../../js/pages/dashboard.js"></script>
+    <script src="../../js/pages/charts.js"></script>
+    <script src="../../js/pages/charts_finance.js"></script>
+    <script src="../../js/pages/layouts_api.js"></script>
+    <script src="../../js/builder.js"></script>
+    <script src="../../js/application.js"></script>
+    <script src="../../js/plugins.js"></script>
+    <script src="../../js/quickview.js"></script>
+    <!-- END CUSTOM ANGULARJS SCRIPTS -->
+
+    <!--GSPharmacy controllers-->
+    <script src="adminCtrl.js"></script>
+    <script src="clients/clientsCtrl.js"></script>
+    <script src="clients/historyCtrl.js"></script>
+    <script src="doctors/doctorsCtrl.js"></script>
+    <script src="drugs/drugsCtrl.js"></script>
+    <script src="home/homeCtrl.js"></script>
+    <script src="roles/rolesCtrl.js"></script>
+    <script src="stadistics/productsCtrl.js"></script>
+    <script src="stadistics/companiesCtrl.js"></script>
+    <script src="subsidiary/subsidiaryCtrl.js"></script>
+    <script src="subsidiary/subsidiaryMedicinesCtrl.js"></script>
+    <script src="profile/adminProfileCtrl.js"></script>
+    <script src="ailments/ailmentsCtrl.js"></script>
+    <script src="houses/housesCtrl.js"></script>
+    <script src="../../js/Checklist-model.js"></script>
+
+    <script type="text/javascript" src="../../node_modules/fusioncharts/fusioncharts.js"></script>
+    <script type="text/javascript" src="../../js/angular-fusioncharts.min.js"></script>
+
+
+
+
+
+</body>
+
+</html>
