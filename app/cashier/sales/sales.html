@@ -116,7 +116,7 @@
                                         <label class="form-label">Barcode</label>
                                         <div class="row">
                                             <div class="col-md-8">
-                                                <input type="text" class="form-control form-white">
+                                                <input type="text" class="form-control form-white" ng-model="barcode">
                                             </div>
                                             <div class="col-md-4">
                                                 <button type="button" class="btn btn-default pull-right" ng-click="add()">Add Item</button>
@@ -130,7 +130,7 @@
                                             <div class="col-md-8">
                                                 <input type="number" ng-model="quantity" data-step="1" class="form-white form-control" min="1" />
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-2" ng-show="lowStock">
                                                 <button style="margin-top: 4px" data-rel="tooltip" type="button" class="btn btn-sm btn-danger pull-right" data-toggle="tooltip"
                                                     data-placement="bottom" title="" data-original-title="Low Stock">
                                                     <i class="fa fa-info"></i>
@@ -228,7 +228,7 @@
                                                 <td class="text-center">
                                                     Price
                                                 </td>
-                                                <td class="td-text-right">
+                                                <td class="text-right">
                                                     Total
                                                 </td>
                                             </tr>
@@ -239,15 +239,15 @@
                                                     <p>{{product.name}}</p>
                                                 </td>
                                                 <td class="text-center">
-                                                    <div class="input-group btn-block">
+                                                    
                                                         <span class="item-price">{{product.quantity}}</span>
-                                                    </div>
+                                                 
                                                 </td>
                                                 <td class="text-center">
                                                     ₡
                                                     <span class="item-price">{{product.price}}</span>
                                                 </td>
-                                                <td class="td-text-right">
+                                                <td class="text-right">
                                                     ₡
                                                     <span class="item-total">{{product.quantity*product.price}}</span>
                                                 </td>
@@ -260,7 +260,7 @@
                             <div style="margin-bottom:20px">
                                 <label class="form-label">Cash</label>
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <input type="number" ng-model="cash" class="form-white form-control" min="{{total}}" ng-disabled="creditCard" />
                                     </div>
                                     <div class="col-md-4" style="margin-top:2px">
