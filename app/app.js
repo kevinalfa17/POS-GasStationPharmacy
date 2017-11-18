@@ -11,6 +11,7 @@
 angular.module('Authentication', []);
 angular.module('Home', []);
 
+
 var GSPApp = angular.module('newApp', [
         'ngAnimate',
         'ngCookies',
@@ -98,8 +99,13 @@ var GSPApp = angular.module('newApp', [
             })
 
 
-    }).run(['$rootScope', '$location', '$cookieStore', '$http', '$window',
+    })
+    .run(['$rootScope', '$location', '$cookieStore', '$http', '$window',
         function ($rootScope, $location, $cookieStore, $http, $window) {
+
+     
+            $http.defaults.headers.post['Content-Type'] = 'application/json';
+
 
             // keep user logged in after page refresh
             $rootScope.globals = $cookieStore.get('globals') || {};
@@ -153,11 +159,17 @@ var GSPApp = angular.module('newApp', [
       });
 
 
+
 //Services
 GSPApp.service('config', function () {
 
     var self = this;
     this.ip = 'http://grupomaravillagasstationpharmacy.azurewebsites.net';
+
+    this.header = {headers:  {
+        'Accept': 'application/json;',
+    }
+};
 
 
 });

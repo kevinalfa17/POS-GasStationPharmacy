@@ -137,6 +137,9 @@ angular.module('newApp')
 
             $scope.items.unshift(post_resquest); //Add new item to json array (at the beginning of the array)
 
+            console.log("post_resquest: "+JSON.stringify(post_resquest))
+
+            
             $http.post(config.ip + '/api/Clients', post_resquest)
                 .success(function (result) {
                     console.log(result);
