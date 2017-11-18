@@ -27,6 +27,7 @@ angular.module('Authentication')
                         user_name: user_name,
                         id: userID,
                         role: user.role,
+                        subsidiary: user.subsidiary,
                         authdata: authdata
                     },
                     usertem: user

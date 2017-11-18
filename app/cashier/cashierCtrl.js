@@ -17,7 +17,7 @@ var GSPApp = angular.module('newApp')
             $location.path('sales')
         }
 
-        //$scope.username = $rootScope.globals.currentUser.user_name;
+        $scope.username = $rootScope.globals.currentUser.user_name;
 
         //Listen viewContentLoaded event
         $scope.$on('$viewContentLoaded', function () {
@@ -68,11 +68,6 @@ var GSPApp = angular.module('newApp')
             return viewLocation === $location.path();
         };
 
-        $scope.logout = function () {
-            AuthenticationService.ClearCredentials();
-            $window.location.href = ('../index.html');
-
-        }
 
     }]);
 
