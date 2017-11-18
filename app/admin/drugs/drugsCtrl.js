@@ -7,7 +7,7 @@ angular.module('newApp')
 
         //HTML AUX OBJECTS
         $scope.header = ['Name', 'Pharmaceutical House', 'Price'];
-        $scope.keys = ['name', 'pharmaceutical_house',  'price'];
+        $scope.keys = ['name', 'pharmaceutical_house', 'price'];
 
         $scope.newRowModels = [];
         //Create empty fields for each key
@@ -68,10 +68,12 @@ angular.module('newApp')
                 put_resquest.pharmaceutical_house = $scope.model[1].id_pharmaceutical_house;
                 $scope.items[i]['pharmaceutical_house'] = $scope.model[1].id_pharmaceutical_house;
 
+                console.log("put" + JSON.stringify(put_resquest))
 
                 $http.put(config.ip + '/api/Medicines/' + $scope.items[i].id_medicine, put_resquest)
                     .success(function (result) {
                         console.log(result);
+
                     })
                     .error(function (data, status) {
                         console.log(data);
@@ -103,8 +105,7 @@ angular.module('newApp')
 
             if (!$scope.addingRow) {
                 $scope.newLineText = ' Cancel Addition'
-            }
-            else {
+            } else {
                 $scope.newLineText = ' Add New Line'
             }
             $scope.addingRow = !$scope.addingRow;
@@ -116,16 +117,14 @@ angular.module('newApp')
             //Verify if all fields are empty (Empty fields = number of fields)
             if ($scope.countEmptyFields($scope.newRowModels) == $scope.keys.length) {
                 alert("New row can't be empty!");
-            }
-            else {
+            } else {
                 //Verify if any field is empty (Empty fields >= 1)
                 if ($scope.countEmptyFields($scope.newRowModels) >= 1) {
                     if (confirm("Are you sure to add row with blank fields?") == true) {
 
                         $scope.verifiedAdd();
                     }
-                }
-                else {
+                } else {
                     //No empty fields
                     $scope.verifiedAdd();
                 }
@@ -155,11 +154,26 @@ angular.module('newApp')
             //Select aux
             post_resquest.pharmaceutical_house = $scope.newRowModels[1].id_pharmaceutical_house;
 
-            $scope.items.unshift(post_resquest); //Add new item to json array (at the beginning of the array)
 
             $http.post(config.ip + '/api/Medicines', post_resquest)
                 .success(function (result) {
                     console.log(result);
+
+                    //Get new product ID
+                    $http.get(config.ip + '/api/Medicines')
+                        .success(function (result) {
+                            $scope.items.unshift(post_resquest); //Add new item to json array (at the beginning of the array)                        
+                            $scope.items[0].id_medicine = result[result.length - 1].id_medicine;
+                            $scope.pageRecalc();
+
+                        })
+                        .error(function (data, status) {
+
+                            console.log(data);
+
+                        });
+
+
                 })
                 .error(function (data, status) {
                     console.log(data);
@@ -201,9 +215,12 @@ angular.module('newApp')
             //Use a aux index if user is searching something
             else {
                 i = index_aux;
-                $scope.searchObjects.splice(index, 1);//Remove from array
+                $scope.searchObjects.splice(index, 1); //Remove from array
 
             }
+
+            console.log("i" + i);
+            console.log("medicine" + JSON.stringify($scope.items[i]));
 
             //Confirm box
             if (confirm("Are you sure to delete this row?") == true) {
@@ -216,7 +233,7 @@ angular.module('newApp')
                         console.log(data);
                     });
 
-                $scope.items.splice(i, 1);//Remove from array
+                $scope.items.splice(i, 1); //Remove from array
             }
             $scope.pageRecalc();
         }
@@ -249,11 +266,18 @@ angular.module('newApp')
 
 
         //Select component variables
-        $scope.options = [
-            { value: 5 },
-            { value: 10 },
-            { value: 15 },
-            { value: 20 },
+        $scope.options = [{
+                value: 5
+            },
+            {
+                value: 10
+            },
+            {
+                value: 15
+            },
+            {
+                value: 20
+            },
         ];
         $scope.select = $scope.options[0]; // Default 5 rows
 
@@ -276,8 +300,7 @@ angular.module('newApp')
         $scope.to = function () {
             if ($scope.items.length < $scope.select.value * $scope.currentPage) {
                 return $scope.items.length;
-            }
-            else {
+            } else {
                 return $scope.select.value;
             }
         }
@@ -285,8 +308,7 @@ angular.module('newApp')
         $scope.pageRecalc = function () {
             if ($scope.getDataSource().length % $scope.select.value >= 1) {
                 $scope.totalPages = Math.floor($scope.getDataSource().length / $scope.select.value) + 1;
-            }
-            else {
+            } else {
                 $scope.totalPages = Math.floor($scope.getDataSource().length / $scope.select.value);
 
             }
@@ -351,8 +373,7 @@ angular.module('newApp')
         $scope.getDataSource = function () {
             if ($scope.search == '') {
                 return $scope.items;
-            }
-            else {
+            } else {
                 return $scope.searchObjects;
             }
         }
@@ -360,11 +381,11 @@ angular.module('newApp')
         //This function check value in json array and return the object-name which matches 
         $scope.getSelectName = function (value, array) {
 
-            for (i = 0; i < array.length; i++) {//Iterate over array
+            for (i = 0; i < array.length; i++) { //Iterate over array
                 var obj = array[i];
-                for (var key in obj) {//Check each key
-                    if (obj.hasOwnProperty(key)){ 
-                        if (obj[key] == value) {//Matches!
+                for (var key in obj) { //Check each key
+                    if (obj.hasOwnProperty(key)) {
+                        if (obj[key] == value) { //Matches!
                             return obj["name"];
                         }
                     }
@@ -379,11 +400,11 @@ angular.module('newApp')
         //This function check value in json array and return the object which matches 
         $scope.getSelectObject = function (value, array) {
 
-            for (i = 0; i < array.length; i++) {//Iterate over array
+            for (i = 0; i < array.length; i++) { //Iterate over array
                 var obj = array[i];
-                for (var key in obj) {//Check each key
+                for (var key in obj) { //Check each key
                     if (obj.hasOwnProperty(key)) {
-                        if (obj[key]+"" == value+"") {//Matches!
+                        if (obj[key] + "" == value + "") { //Matches!
                             return obj;
                         }
                     }
@@ -398,5 +419,3 @@ angular.module('newApp')
 
 
     }]);
-
-

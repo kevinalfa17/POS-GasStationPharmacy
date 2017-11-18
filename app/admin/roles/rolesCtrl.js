@@ -1,5 +1,5 @@
 angular.module('newApp')
-    .controller('rolesCtrl', ['$scope', '$location', '$http','config', function ($scope, $location, $http,config) {
+    .controller('rolesCtrl', ['$scope', '$location', '$http', 'config', function ($scope, $location, $http, config) {
 
         $scope.model = {}; //Aux variable to manage ng-repeat scope
 
@@ -43,12 +43,9 @@ angular.module('newApp')
                     "description": $scope.roles[i].description
                 }
 
-                console.log("req1"+post_resquest.id_role);
-                console.log("req2"+post_resquest.name);
-                console.log("req3"+post_resquest.description);
 
 
-                $http.put(config.ip+'/api/Roles/' + $scope.roles[i].id_role, post_resquest)
+                $http.put(config.ip + '/api/Roles/' + $scope.roles[i].id_role, post_resquest)
                     .success(function (result) {
 
                         console.log(result);
@@ -75,8 +72,7 @@ angular.module('newApp')
 
             if (!$scope.addingRow) {
                 $scope.newLineText = ' Cancel Addition'
-            }
-            else {
+            } else {
                 $scope.newLineText = ' Add New Line'
             }
             $scope.addingRow = !$scope.addingRow;
@@ -87,15 +83,13 @@ angular.module('newApp')
             //Verify if both fields are empty
             if (name == '' && description == '') {
                 alert("New row can't be empty!");
-            }
-            else {
+            } else {
                 //Verify if one field is empty
                 if (name == '' || description == '') {
                     if (confirm("Are you sure to add row with blank fields?") == true) {
                         $scope.verifiedAdd(name, description);
                     }
-                }
-                else {
+                } else {
                     //No empty fields
                     $scope.verifiedAdd(name, description);
                 }
@@ -104,16 +98,34 @@ angular.module('newApp')
 
         //Add new row after checking
         $scope.verifiedAdd = function (name, description) {
-            $scope.roles.unshift({ name, description }); //Add new role to json array
             //HTTP REQUEST HERE
             var post_resquest = {
                 "name": name,
                 "description": description
             }
 
-            $http.post(config.ip+'/api/Roles', post_resquest)
+            $http.post(config.ip + '/api/Roles', post_resquest)
                 .success(function (result) {
                     console.log(result);
+
+                    //Get new role ID
+                    $http.get(config.ip + '/api/Roles')
+                        .success(function (result) {
+                            $scope.roles.unshift({
+                                name,
+                                description
+                            }); //Add new role to json array
+                            $scope.roles[0].id_role = result[result.length - 1].id_role;
+                            $scope.pageRecalc();
+
+
+                        })
+                        .error(function (data, status) {
+
+                            console.log(data);
+
+                        });
+
                 })
                 .error(function (data, status) {
                     console.log(data);
@@ -147,14 +159,14 @@ angular.module('newApp')
             //Use a aux index if user is searching something
             else {
                 i = index_aux;
-                $scope.searchObjects.splice(index, 1);//Remove from array
+                $scope.searchObjects.splice(index, 1); //Remove from array
 
             }
 
             //Confirm box
             if (confirm("Are you sure to delete this row?") == true) {
 
-                $http.delete(config.ip+'/api/Roles/' + $scope.roles[i].id_role)
+                $http.delete(config.ip + '/api/Roles/' + $scope.roles[i].id_role)
                     .success(function (result) {
 
                         console.log(result);
@@ -165,7 +177,7 @@ angular.module('newApp')
 
                     });
 
-                $scope.roles.splice(i, 1);//Remove from array
+                $scope.roles.splice(i, 1); //Remove from array
 
             }
             $scope.pageRecalc();
@@ -178,7 +190,7 @@ angular.module('newApp')
         }
 
         $scope.roles = [];
-        $http.get(config.ip+'/api/Roles')
+        $http.get(config.ip + '/api/Roles')
             .success(function (result) {
                 console.log(result);
                 $scope.roles = result;
@@ -199,11 +211,18 @@ angular.module('newApp')
         });
 
         //Select component variables
-        $scope.options = [
-            { value: 5 },
-            { value: 10 },
-            { value: 15 },
-            { value: 20 },
+        $scope.options = [{
+                value: 5
+            },
+            {
+                value: 10
+            },
+            {
+                value: 15
+            },
+            {
+                value: 20
+            },
         ];
         $scope.select = $scope.options[0]; // Default 5 rows
 
@@ -226,18 +245,15 @@ angular.module('newApp')
         $scope.to = function () {
             if ($scope.roles.length < $scope.select.value * $scope.currentPage) {
                 return $scope.roles.length;
-            }
-            else {
+            } else {
                 return $scope.select.value;
             }
         }
         //Recalculate the number list for pagination
         $scope.pageRecalc = function () {
-            console.log("lenght" + $scope.getDataSource().length);
             if ($scope.getDataSource().length % $scope.select.value >= 1) {
                 $scope.totalPages = Math.floor($scope.getDataSource().length / $scope.select.value) + 1;
-            }
-            else {
+            } else {
                 $scope.totalPages = Math.floor($scope.getDataSource().length / $scope.select.value);
 
             }
@@ -289,12 +305,11 @@ angular.module('newApp')
         //Choose between original roles object or roles in searchObject
         $scope.getDataSource = function () {
             if ($scope.search == '') {
-                console.log("uno")
+
                 return $scope.roles;
 
-            }
-            else {
-                console.log("dos")
+            } else {
+
                 return $scope.searchObjects;
             }
         }
@@ -303,7 +318,7 @@ angular.module('newApp')
     }]);
 
 
-        // TODO 
-        //RESPONSIVE
+// TODO 
+//RESPONSIVE
 
-        //Form new something
+//Form new something

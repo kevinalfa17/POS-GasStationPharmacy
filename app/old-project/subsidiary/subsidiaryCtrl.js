@@ -418,7 +418,7 @@ angular.module('newApp')
 
             }
 
-            return "err";
+            return "Desconocido";
 
         }
 
@@ -438,7 +438,7 @@ angular.module('newApp')
 
             }
 
-            return "err";
+            return "Desconocido";
 
         }
 

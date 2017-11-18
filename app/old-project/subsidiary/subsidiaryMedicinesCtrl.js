@@ -393,7 +393,7 @@ angular.module('newApp')
 
             }
 
-            return "err";
+            return "Desconocido";
 
         }
 

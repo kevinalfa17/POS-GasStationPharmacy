@@ -26,8 +26,7 @@ angular.module('newApp')
 
             if (!$scope.addingRow) {
                 $scope.newLineText = ' Cancel Addition'
-            }
-            else {
+            } else {
                 $scope.newLineText = ' Add New Line'
             }
             $scope.addingRow = !$scope.addingRow;
@@ -39,16 +38,14 @@ angular.module('newApp')
             //Verify if all fields are empty (Empty fields = number of fields)
             if ($scope.countEmptyFields($scope.newRowModels) == $scope.keys.length) {
                 alert("New row can't be empty!");
-            }
-            else {
+            } else {
                 //Verify if any field is empty (Empty fields >= 1)
                 if ($scope.countEmptyFields($scope.newRowModels) >= 1) {
                     if (confirm("Are you sure to add row with blank fields?") == true) {
 
                         $scope.verifiedAdd();
                     }
-                }
-                else {
+                } else {
                     //No empty fields
                     $scope.verifiedAdd();
                 }
@@ -75,12 +72,28 @@ angular.module('newApp')
                 post_resquest[$scope.keys[i]] = $scope.newRowModels[i];
             }
 
-            $scope.items.unshift(post_resquest); //Add new item to json array (at the beginning of the array)
 
             console.log(JSON.stringify(post_resquest));
             $http.post(config.ip + '/api/PharmaceuticalHouses', post_resquest)
                 .success(function (result) {
                     console.log(result);
+
+
+                    //Get new house ID
+                    $http.get(config.ip + '/api/PharmaceuticalHouses')
+                        .success(function (result) {
+                            $scope.items.unshift(post_resquest); //Add new item to json array (at the beginning of the array)
+                            $scope.items[0].id_pharmaceutical_house = result[result.length - 1].id_pharmaceutical_house;
+                            $scope.pageRecalc();
+
+
+                        })
+                        .error(function (data, status) {
+
+                            console.log(data);
+
+                        });
+
                 })
                 .error(function (data, status) {
                     console.log(data);
@@ -122,7 +135,7 @@ angular.module('newApp')
             //Use a aux index if user is searching something
             else {
                 i = index_aux;
-                $scope.searchObjects.splice(index, 1);//Remove from array
+                $scope.searchObjects.splice(index, 1); //Remove from array
 
             }
 
@@ -137,7 +150,7 @@ angular.module('newApp')
                         console.log(data);
                     });
 
-                $scope.items.splice(i, 1);//Remove from array
+                $scope.items.splice(i, 1); //Remove from array
             }
             $scope.pageRecalc();
         }
@@ -170,11 +183,18 @@ angular.module('newApp')
 
 
         //Select component variables
-        $scope.options = [
-            { value: 5 },
-            { value: 10 },
-            { value: 15 },
-            { value: 20 },
+        $scope.options = [{
+                value: 5
+            },
+            {
+                value: 10
+            },
+            {
+                value: 15
+            },
+            {
+                value: 20
+            },
         ];
         $scope.select = $scope.options[0]; // Default 5 rows
 
@@ -197,8 +217,7 @@ angular.module('newApp')
         $scope.to = function () {
             if ($scope.items.length < $scope.select.value * $scope.currentPage) {
                 return $scope.items.length;
-            }
-            else {
+            } else {
                 return $scope.select.value;
             }
         }
@@ -206,8 +225,7 @@ angular.module('newApp')
         $scope.pageRecalc = function () {
             if ($scope.getDataSource().length % $scope.select.value >= 1) {
                 $scope.totalPages = Math.floor($scope.getDataSource().length / $scope.select.value) + 1;
-            }
-            else {
+            } else {
                 $scope.totalPages = Math.floor($scope.getDataSource().length / $scope.select.value);
 
             }
@@ -272,8 +290,7 @@ angular.module('newApp')
         $scope.getDataSource = function () {
             if ($scope.search == '') {
                 return $scope.items;
-            }
-            else {
+            } else {
                 return $scope.searchObjects;
             }
         }
@@ -281,5 +298,3 @@ angular.module('newApp')
 
 
     }]);
-
-
