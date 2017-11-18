@@ -15,6 +15,8 @@ angular.module('Authentication')
                 .success(function (response) {
                     console.log(response);
                     callback(response);
+                }).error(function (data, status) {
+                    error(data);
                 });
 
             };
@@ -28,7 +30,8 @@ angular.module('Authentication')
                         id: userID,
                         role: user.role,
                         subsidiary: user.subsidiary,
-                        authdata: authdata
+                        authdata: authdata,
+                        cashier: user.cashier
                     },
                     usertem: user
                 };
