@@ -92,6 +92,10 @@ var GSPApp = angular.module('newApp', [
                 templateUrl: 'subsidiary/subsidiaryMedicines.html',
                 controller: 'subsidiaryMedicinesCtrl'
             })
+            .when('/houses', {
+                templateUrl: 'houses/houses.html',
+                controller: 'housesCtrl'
+            })
 
 
     }).run(['$rootScope', '$location', '$cookieStore', '$http', '$window',

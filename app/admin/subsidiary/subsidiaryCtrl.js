@@ -6,8 +6,8 @@ angular.module('newApp')
         $scope.editIndex = -1; //Actual row under edition
 
         //HTML AUX OBJECTS
-        $scope.header = ['Name', 'Description', 'Address', 'Company', 'Admin', 'Medicines'];
-        $scope.keys = ['name', 'description', 'address', 'company_name', 'administrator_id'];
+        $scope.header = ['Name', 'Description', 'Company', 'Medicines'];
+        $scope.keys = ['name', 'description', 'company_name'];
 
         $scope.newRowModels = [];
         //Create empty fields for each key
@@ -23,17 +23,6 @@ angular.module('newApp')
                 $scope.companies = result;
                 console.log("company" + JSON.stringify($scope.companies));
                 $scope.newRowModels[3] = $scope.companies[0]; // Default
-            })
-            .error(function (data, status) {
-                console.log(data);
-            });
-
-        //admins
-        $scope.admins = [];
-        $http.get(config.ip + '/api/Administrators')
-            .success(function (result) {
-                $scope.admins = result;
-                $scope.newRowModels[4] = $scope.admins[0]; // Default
             })
             .error(function (data, status) {
                 console.log(data);
@@ -61,7 +50,6 @@ angular.module('newApp')
 
             //Select aux
             $scope.model[3] = $scope.getSelectObject(arguments[4], $scope.companies);
-            $scope.model[4] = $scope.getSelectObject(arguments[5], $scope.admins);
 
 
         }
@@ -97,9 +85,6 @@ angular.module('newApp')
                 //Select aux
                 put_resquest.company = $scope.model[3].id_company;
                 $scope.items[i]['company'] = $scope.model[3].id_company;
-
-                put_resquest.administrator_id = $scope.model[4].id_employee;
-                $scope.items[i]['administrator_id'] = $scope.model[4].id_employee;
 
                 console.log(JSON.stringify(put_resquest));
                 $http.put(config.ip + '/api/Subsidiaries/' + $scope.items[i].id_subsidiary, put_resquest)
@@ -189,7 +174,6 @@ angular.module('newApp')
 
             //Select aux
             post_resquest.company = $scope.newRowModels[3].id_company;
-            post_resquest.administrator_id = $scope.newRowModels[4].id_employee;
 
 
             //LISTA VACIA
@@ -468,6 +452,5 @@ angular.module('newApp')
     }]);
 
     //TODO
-    //Admin select
     //Reportes
     //recetas

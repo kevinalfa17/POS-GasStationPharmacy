@@ -8,8 +8,8 @@ angular.module('newApp')
         $scope.editIndex = -1; //Actual row under edition
 
         //HTML AUX OBJECTS
-        $scope.header = ['Medicine',  'Quantity'];
-        $scope.keys = ['id_medicine',  'quantity'];
+        $scope.header = ['Medicine',  'Quantity','Stock Promedio','Stock Minimo'];
+        $scope.keys = ['medicine',  'quantity', 'stock_promedio', 'stock_minimo'];
 
         $scope.newRowModels = [];
         //Create empty fields for each key
@@ -70,16 +70,11 @@ angular.module('newApp')
                 put_resquest.name = "";
 
                 //Select aux
-                put_resquest.id_medicine = $scope.model[0].id_medicine;
-                $scope.items[i]['id_medicine'] = $scope.model[0].id_medicine;
-
-                $scope.subsidiary_put_request = $scope.subsidiary;
-                $scope.subsidiary_put_request.medicines = [];
-                $scope.subsidiary_put_request.medicines[0] = put_resquest;
-
+                put_resquest.medicine = $scope.model[0].medicine;
+                $scope.items[i]['medicine'] = $scope.model[0].medicine;
                 console.log("put "+JSON.stringify($scope.subsidiary_put_request));
 
-                $http.put(config.ip + '/api/Subsidiaries/' + $scope.id, $scope.subsidiary_put_request)
+                $http.put(config.ip + '/api/MedicinesbySubsidiaries?idm=' +put_resquest.medicine+"&ids="+$scope.id, put_resquest)
                     .success(function (result) {
                         console.log(result);
                     })
@@ -162,7 +157,7 @@ angular.module('newApp')
             post_resquest.name = "";
 
             //Select aux
-            post_resquest.medicine = $scope.newRowModels[0].id_medicine;
+            post_resquest.medicine = $scope.newRowModels[0].medicine;
             post_request.subsidiary = $scope.id;
             post_resquest.quantity = $scope.newRowModels[1];
 
@@ -170,7 +165,7 @@ angular.module('newApp')
 
 
             //*******EDIT POST******/
-            $http.post(config.ip + '/api/MedicinesbySubsidiary', post_resquest)
+            $http.post(config.ip + '/api/MedicinesbySubsidiaries', post_resquest)
                 .success(function (result) {
                     console.log(result);
                 })
@@ -242,10 +237,9 @@ angular.module('newApp')
 
         $scope.items = [];
         $scope.subsidiary = {};
-        $http.get(config.ip + '/api/Subsidiaries/'+$scope.id)
+        $http.get(config.ip + '/api/MedicinesbySubsidiaries/'+$scope.id+"?type=s")
             .success(function (result) {
-                $scope.subsidiary = result;
-                $scope.items = $scope.subsidiary.medicines;
+                $scope.items = result;
                 $scope.pageRecalc();
 
             })

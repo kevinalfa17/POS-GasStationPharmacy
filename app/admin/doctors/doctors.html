@@ -33,7 +33,7 @@
                         </div>
                     </div>
 
-                    <!--TABLE-->
+                    <!--TABLE--><div class="table-scroll">
                     <table class="table table-hover dataTable" id="table-editable">
                         <thead>
                             <tr>
@@ -57,7 +57,7 @@
                                 <td><input type="text" class="form-control small" ng-model="newRowModels[9]"></td>
 
 
-                                <td class="text-right">
+                                <td class="td-text-right">
                                     <a class="edit btn btn-sm btn-success" ng-click="add()" href="javascript:;">Save</a>
                                     <a class="delete btn btn-sm btn-danger" ng-click="cancel()" href="javascript:;"><i class="icons-office-52"></i></a>
                                 </td>
@@ -75,7 +75,7 @@
                                 <td><select ng-model="model[8]" ng-options="subsidiary.name for subsidiary in subsidiaries" class="form-control select-input" ng-show="editable($index)"></select><p ng-show="!editable($index)">{{getSelectName(item.subsidiary,subsidiaries)}}</p></td>
                                 <td><input type="text" class="form-control small" ng-model="model[9]" ng-show="editable($index)"><p ng-show="!editable($index)">{{item.user_name}}</p></td>
 
-                                <td class="text-right">
+                                <td class="td-text-right">
 
                                     <a class="edit btn btn-sm btn-default" ng-click="edit($index,item.id_employee,item.first_name, item.second_name, item.first_last_name, item.second_last_name, 
                                     item.birthdate, item.residence, item.role, item.subsidiary,item.user_name)" ng-show="!editable($index)" href="javascript:;"><i class="icon-note"></i></a>
@@ -87,7 +87,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <!--END TABLE-->
+                    </div><!--END TABLE-->
 
                     <!--PAGINATION ROW-->
                     <div class="row">

@@ -6,8 +6,8 @@ angular.module('newApp')
         $scope.editIndex = -1; //Actual row under edition
 
         //HTML AUX OBJECTS
-        $scope.header = ['Name', 'Pharmaceutical House', 'Prescription', 'Price'];
-        $scope.keys = ['name', 'pharmaceutical_house', 'prescription', 'price'];
+        $scope.header = ['Name', 'Pharmaceutical House', 'Price'];
+        $scope.keys = ['name', 'pharmaceutical_house',  'price'];
 
         $scope.newRowModels = [];
         //Create empty fields for each key
@@ -15,13 +15,6 @@ angular.module('newApp')
             $scope.newRowModels[i] = '';
         }
 
-        //SELECTS
-        //prescription
-        $scope.prescription = [ 
-            { value: true, name: 'Yes' },
-            { value: false, name: 'No' },
-        ];
-        $scope.newRowModels[2] = $scope.prescription[0]; // Default
 
         //houses
         $scope.houses = [];
@@ -43,7 +36,6 @@ angular.module('newApp')
                 $scope.model[i - 1] = arguments[i];
             }
             $scope.model[1] = $scope.getSelectObject(arguments[2], $scope.houses);
-            $scope.model[2] = $scope.getSelectObject(arguments[3], $scope.prescription);
         }
 
         //Save changes if there was any change
@@ -73,9 +65,6 @@ angular.module('newApp')
                 put_resquest.id_medicine = $scope.items[i].id_medicine;
 
                 //Select_aux
-                put_resquest.prescription = $scope.model[2].value;
-                $scope.items[i]['prescription'] = $scope.model[2].value;
-
                 put_resquest.pharmaceutical_house = $scope.model[1].id_pharmaceutical_house;
                 $scope.items[i]['pharmaceutical_house'] = $scope.model[1].id_pharmaceutical_house;
 
@@ -165,7 +154,6 @@ angular.module('newApp')
 
             //Select aux
             post_resquest.pharmaceutical_house = $scope.newRowModels[1].id_pharmaceutical_house;
-            post_resquest.prescription = $scope.newRowModels[2].value;
 
             $scope.items.unshift(post_resquest); //Add new item to json array (at the beginning of the array)
 

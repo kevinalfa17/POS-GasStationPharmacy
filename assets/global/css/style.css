@@ -13207,8 +13207,19 @@ input[type="date"] {
   background: #212026!important;
 }
 
+.table-scroll{
+  overflow:auto!important;
+}
+
 .no-spin-number::-webkit-inner-spin-button, .no-spin::-webkit-outer-spin-button {
   -webkit-appearance: none !important;
   margin: 0 !important;
   -moz-appearance:textfield !important;
+}
+
+
+.td-text-right {
+  text-align: right!important;
+  min-width:118px!important;
+  max-width:118px!important;
 }
