@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('Authentication')
-    .controller('loginCtrl', ['$scope', '$rootScope', '$window', 'AuthenticationService', '$http','config',
-        function ($scope, $rootScope, $window, AuthenticationService, $http,config) {
+    .controller('loginCtrl', ['$scope', '$rootScope', '$window', 'AuthenticationService', '$http', 'config',
+        function ($scope, $rootScope, $window, AuthenticationService, $http, config) {
             //Reset login status
             AuthenticationService.ClearCredentials();
 
@@ -26,7 +26,7 @@ angular.module('Authentication')
                 for (var i = 0; i < $scope.allCashiers.length; i++) {
                     //If the selected cashier exist in the employee subsidiary, return true
                     if ($scope.allCashiers[i].cash == $scope.cashier && $scope.allCashiers[i].subsidiary == employeeSubsidiary) {
-                       
+
                         return true;
                     }
                 }
@@ -57,21 +57,31 @@ angular.module('Authentication')
                         //User is employee
                         else {
 
-                            console.log(JSON.stringify($scope.allCashiers))
-                            //Check user cashier
-                            if ($scope.checkCashier(user.subsidiary)) {
-                                //Everything is ok
-                                $window.location.href = ('/app/cashier/cashier.html');                                                              
-                                //Register initial cash
-                            }
-                            else{
-                                $scope.error = "This cashier number is not part of your subsidiary";                                
-                            }
+                            var post_resquest = {
+                            "cash": $scope.cashier,
+                            "subsidiary": user.subsidiary,
+                            "employee": userId,
+                            "initial_time": new Date(),
+                            "final_time": new Date(),
+                            "initial_cash": $scope.cash,
+                            "final_cash": $scope.cash
+                        }
+                            //Register cashier
+                            $http.post(config.ip + '/api/CashRegisters', post_resquest)
+                            .success(function (result) {
+                                console.log(result);
+                                $window.location.href = ('/app/cashier/cashier.html');
+                                
+                            })
+                            .error(function (data, status) {
+                                console.log(data);
+                                $scope.error = "Error registering cashier"
+            
+                            });            
 
                         }
 
                     } else {
-                        console.log("errorrrrr")
                         $scope.error = response.message;
                         $scope.dataLoading = false;
                     }
