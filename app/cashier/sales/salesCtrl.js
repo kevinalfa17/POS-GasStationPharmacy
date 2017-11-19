@@ -5,10 +5,17 @@ angular.module('newApp')
             $scope.$on('$viewContentLoaded', function () {
 
                 $scope.user = {
+                    id_client: '',
                     first_name: '',
-                    first_last_name: ''
+                    first_last_name: '',
+                    second_name: '',
+                    second_last_name: '',
+                    birthdate: '',
+                    phone: '',
+                    residence: ''
                 };
 
+                //General input variables
                 $scope.defaultClient = true;
                 $scope.clientExist = true;
                 $scope.creditCard = false;
@@ -23,12 +30,11 @@ angular.module('newApp')
 
                 //Subsidiary id
                 $scope.subsidiary = $rootScope.globals.currentUser.subsidiary;
-                console.log("subsi" + $scope.subsidiary)
 
 
                 //Remove item to the list
                 $scope.remove = function (index) {
-                    $scope.total = $scope.total - ($scope.productList[index].price*$scope.productList[index].quantity); //Remove product cost to total cost                
+                    $scope.total = $scope.total - ($scope.productList[index].price * $scope.productList[index].quantity); //Remove product cost to total cost                
                     $scope.productList.splice(index, 1)
                 }
 
@@ -45,14 +51,91 @@ angular.module('newApp')
 
                 //Finish sale and print invoice
                 $scope.finish = function () {
-                    var $popup = $window.open("sales/invoice.html", "popup", "width=450,height=600,left=10,top=150");
-                    $popup.productList = $scope.productList;
-                    $popup.date = new Date();
-                    $popup.total = $scope.total;
-                    $popup.number = "0000"; //Get from DB
-                    $route.reload();
 
+                    //Register user
+                    if ($scope.defaultClient == false && $scope.idReady) {
+                        $scope.user.id_client = $scope.userId;
+
+                        $http.post(config.ip + '/api/Clients', $scope.user)
+                            .success(function (result) {
+                                console.log(result);
+                                //If only is registering a user
+                                if ($scope.total <= 0) {
+                                    $route.reload();
+                                }
+                            })
+                            .error(function (data, status) {
+                                console.log(data);
+
+                            });
+                    }
+
+                    //Register sale
+                    if ($scope.total > 0) {
+
+                        var date = new Date();
+                        var aux_date = date.getFullYear()+"-"+date.getMonth()+"-"+
+                        date.getDate()+"T"+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+
+                        var client;
+                        var payment_type;
+
+                        //Set client id
+                        if ($scope.defaultClient || !$scope.idReady) {
+                            client = '000000000';
+                        } else {
+                            client = userId;
+                        }
+
+                        //Set payment type
+                        if ($scope.creditCard) {
+                            payment_type = 1;
+                        } else {
+                            payment_type = 2;
+                        }
+
+                        //Delete products names and houses
+                        var formattedProducts =[];
+                        for(var i = 0; i < $scope.productList.length; i++){
+                            formattedProducts[i] = $scope.productList[i];
+                            delete formattedProducts[i]["name"];
+                            delete formattedProducts[i]["pharmaceutical_house"];
+                        }
+
+                        var post_request = {
+                            "id_sale": null,
+                            "total": $scope.total,
+                            "sale_date": aux_date,
+                            "client": Number(client),
+                            "payment_type": payment_type,
+                            "employee": $rootScope.globals.currentUser.id,
+                            "subsidiary": $rootScope.globals.currentUser.subsidiary,
+                            "cash": $rootScope.globals.currentUser.cashier,
+                            "medicines": formattedProducts
+                        }
+
+
+                        var $popup = $window.open("sales/invoice.html", "popup", "width=450,height=600,left=10,top=150");
+
+                        //Register in DB
+                        console.log("post"+JSON.stringify(post_request));
+                        $http.post(config.ip + '/api/Sales', post_request)
+                            .success(function (result) {
+                                console.log(result);
+                                //Print invoice
+                                $popup.productList = $scope.productList;
+                                $popup.date = date;
+                                $popup.total = $scope.total;
+                                $popup.number = result.id_inserted; //Get from DB                                                                
+                                //$route.reload();
+                            })
+                            .error(function (data, status) {
+                                console.log(data);
+
+                            });
+                    }
                 }
+
 
                 //Get client list to check if client is new 
                 $scope.clients = [];
@@ -88,9 +171,13 @@ angular.module('newApp')
                 $scope.checkClient = function (client) {
                     for (var i = 0; i < $scope.clients.length; i++) {
                         if ($scope.clients[i].id_client == client) {
+                            $scope.user.first_name = $scope.clients[i].first_name;
+                            $scope.user.phone = $scope.clients[i].phone;
                             return true;
                         }
                     }
+                    $scope.user.first_name = ''
+                    $scope.user.phone = '';
                     return false;
                 }
 
@@ -98,7 +185,7 @@ angular.module('newApp')
                 $scope.addProduct = function (product) {
                     for (var i = 0; i < $scope.products.length; i++) {
                         if ($scope.products[i].medicine == product) {
-                            $scope.searchProduct(product);       
+                            $scope.searchProduct(product);
                         }
                     }
                 }
@@ -109,6 +196,8 @@ angular.module('newApp')
                         if ($scope.productsData[i].id_medicine == product) {
                             var newProduct = $scope.productsData[i];
                             newProduct.quantity = $scope.quantity;
+                            newProduct.sale = null;
+                            newProduct = JSON.parse(JSON.stringify(newProduct).split('"id_medicine":').join('"medicine":'));
                             //Add product to list
                             $scope.productList.push(newProduct);
                             //Update total
@@ -121,7 +210,7 @@ angular.module('newApp')
                 //Check is product was added to product list before
                 $scope.productAlreadyAdded = function (product) {
                     for (var i = 0; i < $scope.productList.length; i++) {
-                        if ($scope.productList[i].id_medicine == product) {
+                        if ($scope.productList[i].medicine == product) {
                             return true;
                         }
                     }
@@ -131,16 +220,14 @@ angular.module('newApp')
                 //Increase product quantity when already exist
                 $scope.increaseProductQuantity = function (product) {
                     for (var i = 0; i < $scope.productList.length; i++) {
-                        if ($scope.productList[i].id_medicine == product) {
+                        if ($scope.productList[i].medicine == product) {
                             $scope.productList[i].quantity = $scope.productList[i].quantity + $scope.quantity;
-                             //Update total
-                             $scope.total = $scope.total + $scope.productList[i].price * $scope.quantity; //Add product cost to total cost
                         }
                     }
                 }
 
                 //Get product min stock, returns -1 if product doesnt exist
-                 $scope.getMinStock = function (product) {
+                $scope.getMinStock = function (product) {
                     for (var i = 0; i < $scope.products.length; i++) {
                         if ($scope.products[i].medicine == product) {
                             return $scope.products[i].stock_minimo;
@@ -153,6 +240,32 @@ angular.module('newApp')
                 //Aux class
                 $scope.viewPort = $('.sf-viewport');
 
+                //Watch for quantity change
+                $scope.$watch('productList', function (newValue, oldValue) {
+                    //It wasnt an addition!
+                    if (newValue.length == oldValue.length) {
+                        
+                        for (var i = 0; i < newValue.length; i++) {
+                            //Quantity changed
+                            if (newValue[i].quantity !== oldValue[i].quantity){
+
+                                //Update total
+                                if(newValue[i].quantity > oldValue[i].quantity){
+                                    //Increase total
+                                    $scope.total = $scope.total + $scope.productList[i].price * (newValue[i].quantity-oldValue[i].quantity); //Add product cost to total cost                                    
+                                }
+                                else{
+                                     //Decrease total
+                                     $scope.total = $scope.total - $scope.productList[i].price * (oldValue[i].quantity-newValue[i].quantity); //Remove product cost to total cost                                    
+                                }
+                            }
+                        }
+
+                    }
+
+                }, true)
+
+                //Product quantity changes
                 $scope.$watch('creditCard', function (newValue, oldValue) {
                     console.log("credit");
                 })
@@ -161,10 +274,9 @@ angular.module('newApp')
                     //Check product min stock
                     var min = $scope.getMinStock($scope.barcode);
                     //If product exist and quantity is higher than the min stock then show warning
-                    if(min != -1 && $scope.quantity >= min){
+                    if (min != -1 && $scope.quantity >= min) {
                         $scope.lowStock = true;
-                    }
-                    else{
+                    } else {
                         $scope.lowStock = false;
                     }
                 })
@@ -173,10 +285,9 @@ angular.module('newApp')
                     //Check product min stock
                     var min = $scope.getMinStock($scope.barcode);
                     //If product exist and quantity is higher than the min stock then show warning
-                    if(min != -1 && $scope.quantity >= min){
+                    if (min != -1 && $scope.quantity >= min) {
                         $scope.lowStock = true;
-                    }
-                    else{
+                    } else {
                         $scope.lowStock = false;
                     }
                 })

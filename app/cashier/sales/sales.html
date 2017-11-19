@@ -184,7 +184,7 @@
                                                     </td>
                                                     <td class="text-center">
                                                         <div class="input-group btn-block">
-                                                            <input type="number" name="quantity" ng-model="product.quantity" size="1" class="form-control form-white">
+                                                            <input type="number" min="1" name="quantity" ng-model="product.quantity" size="1" class="form-control form-white">
                                                         </div>
                                                     </td>
                                                     <td class="text-center">
@@ -304,13 +304,13 @@
 
                         <div class="col-md-6" style="border-left: 2px dashed #E9E9E9; height: 300px">
                             <h2>Client Summary</h2>
-                            <p ng-show="defaultClient">Client is not registered! Using default client</p>
-                            <h3 ng-show="!defaultClient">Client id</h3>
-                            <p ng-show="!defaultClient">{{userId}}</p>
-                            <h3 ng-show="!defaultClient">Name</h3>
-                            <p ng-show="!defaultClient">{{user.first_name}}</p>
-                            <h3 ng-show="!defaultClient">Phone</h3>
-                            <p ng-show="!defaultClient">{{user.phone}}</p>
+                            <p ng-show="defaultClient || idReady ">Client is not registered! Using default client</p>
+                            <h3 ng-show="!defaultClient && idReady">Client id</h3>
+                            <p ng-show="!defaultClient && idReady">{{userId}}</p>
+                            <h3 ng-show="!defaultClient && idReady">Name</h3>
+                            <p ng-show="!defaultClient && idReady">{{user.first_name}}</p>
+                            <h3 ng-show="!defaultClient && idReady">Phone</h3>
+                            <p ng-show="!defaultClient &&  idReady">{{user.phone}}</p>
 
 
                         </div>
@@ -327,8 +327,8 @@
         <div class="copyright ">
             <p class="pull-left sm-pull-reset ">
                 <span>Copyright
-                    <span class="copyright ">&copy;</span> 2015 </span>
-                <span>THEMES LAB</span>.
+                    <span class="copyright ">&copy;</span> 2017 </span>
+                <span>Gas Station Pharmacy</span>.
                 <span>All rights reserved. </span>
             </p>
             <p class="pull-right sm-pull-reset ">
