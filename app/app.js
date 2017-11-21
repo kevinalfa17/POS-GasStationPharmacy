@@ -116,7 +116,7 @@ var GSPApp = angular.module('newApp', [
             $rootScope.$on('$locationChangeStart', function (event, next, current) {
                 // redirect to login page if not logged in
                 if ($location.path() !== '/' && $location.path() !== '' && $location.path() !== '/login-admin' && $location.path() !== '/login-cashier' && $location.path() !== '/register' && !$rootScope.globals.currentUser) {
-                    //$window.location.href = ('../index.html');
+                    $window.location.href = ('../index.html');
                 }
             });
         }
@@ -164,7 +164,7 @@ var GSPApp = angular.module('newApp', [
 GSPApp.service('config', function () {
 
     var self = this;
-    this.ip = 'http://grupomaravillagasstationpharmacy.azurewebsites.net';
+    this.ip = 'http://gasstationpharmacy-env.us-east-2.elasticbeanstalk.com';
 
     this.header = {headers:  {
         'Accept': 'application/json;',

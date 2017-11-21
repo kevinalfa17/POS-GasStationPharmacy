@@ -45,9 +45,12 @@ angular.module('Authentication')
                     //Server response
                     if (response.success) {
 
+
+                        var date = new Date();
                         userId = response.information.id_employee;
                         user = response.information;
                         user.cashier = $scope.cashier;
+                        user.initial_time = date;
 
                         AuthenticationService.SetCredentials($scope.username, $scope.password, service, userId, user);
                         //User is admin
@@ -61,8 +64,8 @@ angular.module('Authentication')
                             "cash": $scope.cashier,
                             "subsidiary": user.subsidiary,
                             "employee": userId,
-                            "initial_time": new Date(),
-                            "final_time": new Date(),
+                            "initial_time": user.initial_time,
+                            "final_time": user.initial_time,
                             "initial_cash": $scope.cash,
                             "final_cash": $scope.cash
                         }

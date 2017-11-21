@@ -31,7 +31,8 @@ angular.module('Authentication')
                         role: user.role,
                         subsidiary: user.subsidiary,
                         authdata: authdata,
-                        cashier: user.cashier
+                        cashier: user.cashier,
+                        initial_time : user.initial_time
                     },
                     usertem: user
                 };
