@@ -19,6 +19,10 @@
 
             $scope.username = $rootScope.globals.currentUser.user_name;
 
+            if($rootScope.globals.currentUser.role != 3){
+                $window.location.href = ('../index.html');
+            }
+
             //Listen viewContentLoaded event
             $scope.$on('$viewContentLoaded', function () {
                 pluginsService.init();
