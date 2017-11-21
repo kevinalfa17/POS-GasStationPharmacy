@@ -32,7 +32,6 @@ angular.module('newApp')
                         //Check if is an admin
                         if (user.role == 3) {
                             //REFUND DONE
-                            $scope.loginLoading = false;
                             //Do the refund in DB
                             if ($scope.product.quantity == $scope.productRefundQuantity) {
                                 //delete from db
@@ -44,11 +43,13 @@ angular.module('newApp')
                                         //Clean credentials
                                         $scope.manageruser = '';
                                         $scope.managerpassword = '';
-                                        //$route.reload();
+                                        $scope.loginLoading = false;
+                                        $route.reload();
 
                                     })
                                     .error(function (data, status) {
                                         console.log(data);
+                                        $scope.loginLoading = false;
                                     });
                             } else {
                                 //update from db
@@ -67,10 +68,12 @@ angular.module('newApp')
                                         //Clean credentials
                                         $scope.manageruser = '';
                                         $scope.managerpassword = '';
-                                        //$route.reload();
+                                        $scope.loginLoading = false;
+                                        $route.reload();
                                     })
                                     .error(function (data, status) {
                                         console.log(data);
+                                        $scope.loginLoading = false;
                                     });
                             }
 
