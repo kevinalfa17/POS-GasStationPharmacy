@@ -4,6 +4,7 @@ angular.module('newApp')
         function ($scope, pluginsService, $window, $route, $http, config, $rootScope) {
             $scope.$on('$viewContentLoaded', function () {
 
+
                 $scope.user = {
                     id_client: '',
                     first_name: '',
@@ -14,6 +15,7 @@ angular.module('newApp')
                     phone: '',
                     residence: ''
                 };
+
 
                 //General input variables
                 $scope.defaultClient = true;
@@ -27,6 +29,10 @@ angular.module('newApp')
                 $scope.cash = '';
                 $scope.barcode = '';
                 $scope.lowStock = false;
+                $scope.invoiceNumber = 0;
+                $scope.invoiceDate = '';
+                $scope.readyToPrint = false;
+                $scope.printing = false;
 
                 //Subsidiary id
                 $scope.subsidiary = $rootScope.globals.currentUser.subsidiary;
@@ -40,6 +46,7 @@ angular.module('newApp')
 
                 //Add new item to list
                 $scope.add = function () {
+                    
                     //Check if is already added
                     if ($scope.productAlreadyAdded($scope.barcode)) {
                         $scope.increaseProductQuantity($scope.barcode);
@@ -51,7 +58,10 @@ angular.module('newApp')
 
                 //Finish sale and print invoice
                 $scope.finish = function () {
-
+                    var icon = $('#loadIcon');// load icon
+                    
+                    console.log("ic"+icon.hasClass("hide"));
+                    icon.removeClass("hide")
                     //Register user
                     if ($scope.defaultClient == false && $scope.idReady) {
                         $scope.user.id_client = $scope.userId;
@@ -74,8 +84,11 @@ angular.module('newApp')
                     if ($scope.total > 0) {
 
                         var date = new Date();
-                        var aux_date = date.getFullYear()+"-"+date.getMonth()+"-"+
-                        date.getDate()+"T"+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+                        var aux_date = date.getFullYear() + "-" + date.getMonth() + "-" +
+                            date.getDate() + "T" + date.getHours() + ":" + date.getMinutes() + ":" + date.getUTCSeconds();
+
+                        $scope.invoiceDate = +date.getMonth() + "/" +
+                            date.getDate() + "/" + date.getFullYear() + " at " + date.getHours() + ":" + date.getMinutes() + ":" + date.getUTCSeconds();
 
                         var client;
                         var payment_type;
@@ -95,8 +108,8 @@ angular.module('newApp')
                         }
 
                         //Delete products names and houses
-                        var formattedProducts =[];
-                        for(var i = 0; i < $scope.productList.length; i++){
+                        var formattedProducts = [];
+                        for (var i = 0; i < $scope.productList.length; i++) {
                             formattedProducts[i] = $scope.productList[i];
                             delete formattedProducts[i]["name"];
                             delete formattedProducts[i]["pharmaceutical_house"];
@@ -115,25 +128,34 @@ angular.module('newApp')
                         }
 
 
-                        var $popup = $window.open("sales/invoice.html", "popup", "width=450,height=600,left=10,top=150");
-
                         //Register in DB
-                        console.log("post"+JSON.stringify(post_request));
                         $http.post(config.ip + '/api/Sales', post_request)
                             .success(function (result) {
                                 console.log(result);
-                                //Print invoice
-                                $popup.productList = $scope.productList;
-                                $popup.date = date;
-                                $popup.total = $scope.total;
-                                $popup.number = result.id_inserted; //Get from DB                                                                
-                                //$route.reload();
+
+
+                                $scope.invoiceNumber = result.id_inserted; //Get from DB 
+                                $scope.readyToPrint = true;
+                                icon.addClass("hide");
+
                             })
                             .error(function (data, status) {
                                 console.log(data);
 
                             });
                     }
+                }
+
+                $scope.print = function () {
+                    var $popup = $window.open("sales/invoice.html", "popup", "width=450,height=600,left=10,top=150");
+                    $popup.productList = $scope.productList;
+                    $popup.date = $scope.invoiceDate;
+                    $popup.total = $scope.total;
+                    $popup.number = $scope.invoiceNumber;
+
+                    //$route.reload();
+
+
                 }
 
 
@@ -244,19 +266,18 @@ angular.module('newApp')
                 $scope.$watch('productList', function (newValue, oldValue) {
                     //It wasnt an addition!
                     if (newValue.length == oldValue.length) {
-                        
+
                         for (var i = 0; i < newValue.length; i++) {
                             //Quantity changed
-                            if (newValue[i].quantity !== oldValue[i].quantity){
+                            if (newValue[i].quantity !== oldValue[i].quantity) {
 
                                 //Update total
-                                if(newValue[i].quantity > oldValue[i].quantity){
+                                if (newValue[i].quantity > oldValue[i].quantity) {
                                     //Increase total
-                                    $scope.total = $scope.total + $scope.productList[i].price * (newValue[i].quantity-oldValue[i].quantity); //Add product cost to total cost                                    
-                                }
-                                else{
-                                     //Decrease total
-                                     $scope.total = $scope.total - $scope.productList[i].price * (oldValue[i].quantity-newValue[i].quantity); //Remove product cost to total cost                                    
+                                    $scope.total = $scope.total + $scope.productList[i].price * (newValue[i].quantity - oldValue[i].quantity); //Add product cost to total cost                                    
+                                } else {
+                                    //Decrease total
+                                    $scope.total = $scope.total - $scope.productList[i].price * (oldValue[i].quantity - newValue[i].quantity); //Remove product cost to total cost                                    
                                 }
                             }
                         }

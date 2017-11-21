@@ -304,13 +304,18 @@
 
                         <div class="col-md-6" style="border-left: 2px dashed #E9E9E9; height: 300px">
                             <h2>Client Summary</h2>
-                            <p ng-show="defaultClient || idReady ">Client is not registered! Using default client</p>
+                            <p ng-show="defaultClient || !idReady ">Client is not registered! Using default client</p>
                             <h3 ng-show="!defaultClient && idReady">Client id</h3>
                             <p ng-show="!defaultClient && idReady">{{userId}}</p>
                             <h3 ng-show="!defaultClient && idReady">Name</h3>
                             <p ng-show="!defaultClient && idReady">{{user.first_name}}</p>
                             <h3 ng-show="!defaultClient && idReady">Phone</h3>
                             <p ng-show="!defaultClient &&  idReady">{{user.phone}}</p>
+                            <br>
+                            <br>
+                                                   
+                            <button type="button" class="btn btn-dark btn-hg" ng-show="readyToPrint" ng-click="print()">Print Invoice</button>
+                            
 
 
                         </div>

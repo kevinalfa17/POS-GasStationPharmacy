@@ -10,7 +10,7 @@ angular.module('newApp')
             $scope.managerpassword = '';
 
             //Product information
-            $scope.product = {};
+            $scope.product = {price:0};
             $scope.productRefundQuantity = 1;
 
             //Process refund
