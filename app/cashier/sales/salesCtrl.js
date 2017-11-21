@@ -110,7 +110,7 @@ angular.module('newApp')
                         //Delete products names and houses
                         var formattedProducts = [];
                         for (var i = 0; i < $scope.productList.length; i++) {
-                            formattedProducts[i] = $scope.productList[i];
+                            formattedProducts[i] = angular.copy($scope.productList[i]);
                             delete formattedProducts[i]["name"];
                             delete formattedProducts[i]["pharmaceutical_house"];
                         }
