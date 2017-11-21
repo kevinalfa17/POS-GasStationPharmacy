@@ -12,7 +12,11 @@
                 </div>
 
                 <div style="margin-top:10px">
-                    <button class="btn btn-default" ng-click="search()">Search</button>
+
+                    <button class="btn btn-default" ng-click="search()">
+                        <i class="fa fa-spinner faa-spin animated" ng-show="loading"></i>
+                        Search
+                    </button>
                 </div>
             </div>
             <div class="col-md-8" style="border-left: 2px dashed #E9E9E9">
@@ -21,7 +25,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <col width="150">
+                                    <col width="200">
                                     <col width="250">
                                     <col width="100">
                                     <td class="text-center">
@@ -39,12 +43,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr ng-show="found">
                                     <td class="text-center">
-                                        <p>{{product.date}}</p>
+                                        {{product.date | date:"MM/dd/yyyy 'at' h:mm:ss"}}
                                     </td>
                                     <td class="text-center">
-                                        <p>{{product.name}}</p>
+                                        {{product.name}}
                                     </td>
                                     <td class="text-center">
                                         <div class="input-group btn-block">
@@ -68,21 +72,18 @@
                             <div class="total text-right bg-primary">
                                 <h3>Total</h3>
                                 <p class="text-right">₡
-                                    <span class="total">{{product.price*productRefundQuantity}}</span>
+                                    <span class="total">{{calcTotal(product.price*productRefundQuantity)}}</span>
                                 </p>
                             </div>
                         </div>
                         <div style="margin-top:40px">
-                            <button class="btn btn-hg btn-default btn-square"  data-toggle="modal" data-target="#modal-manager">Refund</button>
-                            
+                            <button class="btn btn-hg btn-default btn-square" data-toggle="modal" data-target="#modal-manager" ng-disabled="calcTotal(product.price*productRefundQuantity) == 0">Refund</button>
+
 
                         </div>
 
                     </div>
                 </div>
-
-
-
 
             </div>
         </div>
@@ -93,44 +94,51 @@
 
 <!-- BEGIN MODAL MANAGER AUTHORIZATION -->
 <div class="modal fade" id="modal-manager" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
-              <h4 class="modal-title"><strong>Manager </strong> permissons required</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <i class="icons-office-52"></i>
+                </button>
+                <h4 class="modal-title">
+                    <strong>Manager </strong> permissons required</h4>
             </div>
 
             <div class="modal-body">
-              <div class="row">
+                <div class="row">
 
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="form-label">Username</label>
-          
-                      <input type="text" name="username" class="form-control" ng-model="manageruser">
-      
-                  </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Username</label>
+
+                            <input type="text" name="username" class="form-control" ng-model="manageruser">
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+
+                            <input type="password" name="password" class="form-control" ng-model="managerpassword">
+
+                        </div>
+                    </div>
+
                 </div>
-
-                <div class="col-md-6">
-                 <div class="form-group">       
-                    <label class="form-label">Password</label>
-                   
-                      <input type="password" name="password" class="form-control" ng-model="managerpassword">
-      
-                  </div>
-                </div>
-
-              </div>
 
             </div>
 
             <div class="modal-footer bg-gray-light">
-              <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-primary btn-embossed" data-dismiss="modal" ng-click="refund()">Authorize refund</button>
+                <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-embossed" ng-click="refund()">
+                    <i class="fa fa-close" ng-show="wrongLogin"></i>
+                    <i class="fa fa-spinner faa-spin animated" ng-show="loginLoading"></i>
+                    Authorize refund
+                </button>
             </div>
-          </div>
         </div>
-      </div>
-      <!-- END MODAL MANAGER AUTHORIZATION  -->
+    </div>
+</div>
+<!-- END MODAL MANAGER AUTHORIZATION  -->

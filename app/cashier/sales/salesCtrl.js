@@ -153,7 +153,7 @@ angular.module('newApp')
                     $popup.total = $scope.total;
                     $popup.number = $scope.invoiceNumber;
 
-                    //$route.reload();
+                    $route.reload();
 
 
                 }
