@@ -1,31 +1,19 @@
 angular.module('newApp')
-    .controller('subsidiaryCtrl', ['$scope', '$location', 'config', '$http', function ($scope, $location, config, $http) {
+    .controller('subsidiaryCtrl', ['$scope', '$location', 'config', '$http','$rootScope', function ($scope, $location, config, $http,$rootScope) {
 
         $scope.model = []; //Aux variable to manage ng-repeat scope
 
         $scope.editIndex = -1; //Actual row under edition
 
         //HTML AUX OBJECTS
-        $scope.header = ['Name', 'Description', 'Company', 'Medicines'];
-        $scope.keys = ['name', 'description', 'company_name'];
+        $scope.header = ['Name', 'Description', 'Medicines'];
+        $scope.keys = ['name', 'description'];
 
         $scope.newRowModels = [];
         //Create empty fields for each key
         for (i = 0; i < $scope.keys.length; i++) {
             $scope.newRowModels[i] = '';
         }
-
-        //SELECTS
-        //companies
-        $scope.companies = [];
-        $http.get(config.ip + '/api/Companies')
-            .success(function (result) {
-                $scope.companies = result;
-                $scope.newRowModels[2] = $scope.companies[0]; // Default
-            })
-            .error(function (data, status) {
-                console.log(data);
-            });
 
         //employees
         $scope.employees = [];
@@ -46,9 +34,6 @@ angular.module('newApp')
             for (i = 1; i < arguments.length; i++) {
                 $scope.model[i - 1] = arguments[i];
             }
-
-            //Select aux
-            $scope.model[2] = $scope.getSelectObject(arguments[3], $scope.companies);
 
 
         }
@@ -82,8 +67,8 @@ angular.module('newApp')
                 put_resquest.id_subsidiary = $scope.items[i].id_subsidiary;
 
                 //Select aux
-                put_resquest.company = $scope.model[2].id_company;
-                $scope.items[i]['company'] = $scope.model[2].id_company;
+                put_resquest.company = $rootScope.globals.currentUser.company;
+                $scope.items[i]['company'] = $rootScope.globals.currentUser.company;
 
                 console.log(JSON.stringify(put_resquest));
                 $http.put(config.ip + '/api/Subsidiaries/' + $scope.items[i].id_subsidiary, put_resquest)
@@ -169,7 +154,7 @@ angular.module('newApp')
             post_resquest.id_subsidiary = 1000;
 
             //Select aux
-            post_resquest.company = $scope.newRowModels[2].id_company;
+            post_resquest.company = $rootScope.globals.currentUser.company;;
 
 
             $http.post(config.ip + '/api/Subsidiaries', post_resquest)
@@ -263,7 +248,13 @@ angular.module('newApp')
         $scope.items = [];
         $http.get(config.ip + '/api/Subsidiaries')
             .success(function (result) {
-                $scope.items = result;
+
+                for(var i = 0; i<result.length; i++){
+                    if($scope.verifyCompany(result[i].company)){
+                        $scope.items.push(result[i]);
+                    }
+                }
+
                 $scope.pageRecalc();
 
             })
@@ -457,6 +448,11 @@ angular.module('newApp')
 
             return value;
 
+        }
+
+        $scope.verifyCompany = function(id){
+
+            return $rootScope.globals.currentUser.company == id;
         }
 
 

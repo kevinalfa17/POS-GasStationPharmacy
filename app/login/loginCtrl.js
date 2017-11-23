@@ -35,6 +35,7 @@ angular.module('Authentication')
 
             //Do login
             $scope.login = function (service) {
+
                 $scope.dataLoading = true;
 
                 //Check user username and password
@@ -45,12 +46,25 @@ angular.module('Authentication')
                     //Server response
                     if (response.success) {
 
+                        var aux_date = new Date();
+                        var month = Number(aux_date.getMonth()) + 1;
+                        var minutes = function () {
+                            if (aux_date.getMinutes() < 10) {
+                                return '0' + aux_date.getMinutes();
+                            } else {
+                                return aux_date.getMinutes();
+                            }
+                        }
 
-                        var date = new Date();
+                        var date = aux_date.getFullYear() + "-" + month + "-" +
+                            aux_date.getDate() + "T" + aux_date.getHours() + ":" + minutes() + ":" + "00";
+                        console.log(date)
+
                         userId = response.information.id_employee;
                         user = response.information;
                         user.cashier = $scope.cashier;
                         user.initial_time = date;
+                        user.initial_cash = $scope.cash;
 
                         AuthenticationService.SetCredentials($scope.username, $scope.password, service, userId, user);
                         //User is admin
@@ -61,26 +75,26 @@ angular.module('Authentication')
                         else {
 
                             var post_resquest = {
-                            "cash": $scope.cashier,
-                            "subsidiary": user.subsidiary,
-                            "employee": userId,
-                            "initial_time": user.initial_time,
-                            "final_time": user.initial_time,
-                            "initial_cash": $scope.cash,
-                            "final_cash": $scope.cash
-                        }
+                                "cash": $scope.cashier,
+                                "subsidiary": user.subsidiary,
+                                "employee": userId,
+                                "initial_time": user.initial_time,
+                                "final_time": user.initial_time,
+                                "initial_cash": $scope.cash,
+                                "final_cash": $scope.cash
+                            }
                             //Register cashier
                             $http.post(config.ip + '/api/CashRegisters', post_resquest)
-                            .success(function (result) {
-                                console.log(result);
-                                $window.location.href = ('/app/cashier/cashier.html');
-                                
-                            })
-                            .error(function (data, status) {
-                                console.log(data);
-                                $scope.error = "Error registering cashier"
-            
-                            });            
+                                .success(function (result) {
+                                    console.log(result);
+                                    $window.location.href = ('/app/cashier/cashier.html');
+
+                                })
+                                .error(function (data, status) {
+                                    console.log(data);
+                                    $scope.error = "Error registering cashier"
+
+                                });
 
                         }
 

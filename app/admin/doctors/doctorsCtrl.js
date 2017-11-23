@@ -1,5 +1,5 @@
 angular.module('newApp')
-    .controller('doctorsCtrl', ['$scope', '$location', 'config', '$http', function ($scope, $location, config, $http) {
+    .controller('doctorsCtrl', ['$scope', '$location', 'config', '$http','$rootScope', function ($scope, $location, config, $http,$rootScope) {
 
         $scope.model = []; //Aux variable to manage ng-repeat scope
 
@@ -11,6 +11,29 @@ angular.module('newApp')
         $scope.keys = ['id_employee', 'first_name', 'second_name', 'first_last_name', 'second_last_name',
             'birthdate', 'residence', 'role', 'subsidiary','user_name'];
         $scope.datesToFormat = ['birthdate'];
+
+        $scope.subsidiaries = [];
+
+        $http.get(config.ip + '/api/Subsidiaries')
+        .success(function (result) {
+            $scope.subsidiaries = result;
+        })
+        .error(function (data, status) {
+            console.log(data);
+        });
+
+        $scope.checkSubsidiary = function(name){
+            for(var i = 0; i<$scope.subsidiaries.length; i++){
+                if($scope.subsidiaries[i].name == name){
+                    if($scope.subsidiaries[i].company == $rootScope.globals.currentUser.company){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+            }
+        }
 
         $scope.newRowModels = [];
         //Create empty fields for each key
@@ -261,7 +284,12 @@ angular.module('newApp')
         $scope.items = [];
         $http.get(config.ip + '/api/Employees')
             .success(function (result) {
-                $scope.items = result;
+               // $scope.items = result;
+                for(var i = 0; i<result.length; i++){
+                    if($scope.checkSubsidiary($scope.getSelectName(result[i].subsidiary,$scope.subsidiaries))){
+                        $scope.items.push(result[i]);
+                    }
+                }
                 $scope.formatIncommingDates();
                 $scope.pageRecalc();
 

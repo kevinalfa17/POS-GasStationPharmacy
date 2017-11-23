@@ -46,7 +46,7 @@ angular.module('newApp')
 
                 //Add new item to list
                 $scope.add = function () {
-                    
+
                     //Check if is already added
                     if ($scope.productAlreadyAdded($scope.barcode)) {
                         $scope.increaseProductQuantity($scope.barcode);
@@ -58,9 +58,9 @@ angular.module('newApp')
 
                 //Finish sale and print invoice
                 $scope.finish = function () {
-                    var icon = $('#loadIcon');// load icon
-                    
-                    console.log("ic"+icon.hasClass("hide"));
+                    var icon = $('#loadIcon'); // load icon
+
+                    console.log("ic" + icon.hasClass("hide"));
                     icon.removeClass("hide")
                     //Register user
                     if ($scope.defaultClient == false && $scope.idReady) {
@@ -84,11 +84,20 @@ angular.module('newApp')
                     if ($scope.total > 0) {
 
                         var date = new Date();
-                        var aux_date = date.getFullYear() + "-" + date.getMonth() + "-" +
-                            date.getDate() + "T" + date.getHours() + ":" + date.getMinutes() + ":" + date.getUTCSeconds();
+                        var month = Number(date.getMonth()) + 1;
+                        var minutes = function () {
+                            if (date.getMinutes() < 10) {
+                                return '0' + date.getMinutes();
+                            } else {
+                                return date.getMinutes();
+                            }
+                        }
+                        var aux_date = date.getFullYear() + "-" + month + "-" +
+                            date.getDate() + "T" + date.getHours() + ":" + minutes() + ":" + "00";
 
-                        $scope.invoiceDate = +date.getMonth() + "/" +
-                            date.getDate() + "/" + date.getFullYear() + " at " + date.getHours() + ":" + date.getMinutes() + ":" + date.getUTCSeconds();
+                            console.log("dt"+aux_date)
+                        $scope.invoiceDate = +month + "/" +
+                            date.getDate() + "/" + date.getFullYear() + " at " + date.getHours() + ":" + minutes() + ":" + "00";
 
                         var client;
                         var payment_type;
@@ -129,6 +138,7 @@ angular.module('newApp')
 
 
                         //Register in DB
+                        console.log("pr" + JSON.stringify(post_request));
                         $http.post(config.ip + '/api/Sales', post_request)
                             .success(function (result) {
                                 console.log(result);
@@ -152,6 +162,8 @@ angular.module('newApp')
                     $popup.date = $scope.invoiceDate;
                     $popup.total = $scope.total;
                     $popup.number = $scope.invoiceNumber;
+                    $popup.subsidiary = $rootScope.globals.currentUser.subsidiary;
+                    $popup.cashier = $rootScope.globals.currentUser.cashier;
 
                     $route.reload();
 
@@ -258,6 +270,16 @@ angular.module('newApp')
                     return -1;
                 }
 
+                //Get product min stock, returns -1 if product doesnt exist
+                $scope.getQuantity = function (product) {
+                    for (var i = 0; i < $scope.products.length; i++) {
+                        if ($scope.products[i].medicine == product) {
+                            return $scope.products[i].quantity;
+                        }
+                    }
+                    return -1;
+                }
+
 
                 //Aux class
                 $scope.viewPort = $('.sf-viewport');
@@ -294,8 +316,9 @@ angular.module('newApp')
                 $scope.$watch('quantity', function (newValue, oldValue) {
                     //Check product min stock
                     var min = $scope.getMinStock($scope.barcode);
+                    var stock = $scope.getQuantity($scope.barcode);
                     //If product exist and quantity is higher than the min stock then show warning
-                    if (min != -1 && $scope.quantity >= min) {
+                    if (min != -1 && stock-$scope.quantity <= min) {
                         $scope.lowStock = true;
                     } else {
                         $scope.lowStock = false;
@@ -305,8 +328,9 @@ angular.module('newApp')
                 $scope.$watch('barcode', function (newValue, oldValue) {
                     //Check product min stock
                     var min = $scope.getMinStock($scope.barcode);
+                    var stock = $scope.getQuantity($scope.barcode);
                     //If product exist and quantity is higher than the min stock then show warning
-                    if (min != -1 && $scope.quantity >= min) {
+                    if (min != -1 && stock-$scope.quantity <= min) {
                         $scope.lowStock = true;
                     } else {
                         $scope.lowStock = false;

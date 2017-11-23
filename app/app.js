@@ -97,6 +97,10 @@ var GSPApp = angular.module('newApp', [
                 templateUrl: 'houses/houses.html',
                 controller: 'housesCtrl'
             })
+            .when('/reports', {
+                templateUrl: 'reports/reports.html',
+                controller: 'reportsCtrl'
+            })
 
 
     })
@@ -165,6 +169,7 @@ GSPApp.service('config', function () {
 
     var self = this;
     this.ip = 'http://gasstationpharmacy-env.us-east-2.elasticbeanstalk.com';
+    this.ip2 = 'localhost:7045';
 
     this.header = {headers:  {
         'Accept': 'application/json;',

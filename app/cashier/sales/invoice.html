@@ -62,6 +62,8 @@
             $scope.date = $window.date;
             $scope.total = $window.total;
             $scope.number = $window.number;
+            $scope.cashier = $window.cashier;
+            $scope.subsidiary = $window.subsidiary;
         });
     </script>
     <div ng-app="newApp" ng-controller="MyChildController">
@@ -69,9 +71,11 @@
         <div style="text-align: center">
             <h4>Gas Station Pharmacy</h3>
                 <h5>Addres: In any street of Cartago</h3>
-                <h5>TEL: 0000-0000</h3>
-                <h5  >Invoice Number: {{number}}</h3>
-                <h5  >Date: {{date}}</h3>
+                    <h5>TEL: 0000-0000</h3>
+                        <h5>Subsidiary Number: {{subsidiary}}</h3>
+                            <h5>Cashier number: {{cashier}}</h3>
+                                <h5>Invoice Number: {{number}}</h3>
+                                    <h5>Date: {{date}}</h3>
         </div>
 
         <div class="table-responsive shopping-cart-table">
@@ -98,18 +102,18 @@
                     <tbody>
                         <tr ng-repeat="product in productList">
                             <td class="text-center">
-                                <p  >{{product.name}}</p>
+                                <p>{{product.name}}</p>
                             </td>
                             <td class="text-center">
                                 <div class="input-group btn-block">
-                                    <span class="item-price"  >{{product.quantity}}</span>
+                                    <span class="item-price">{{product.quantity}}</span>
                                 </div>
                             </td>
-                            <td class="text-center"  >
+                            <td class="text-center">
                                 &#8353;
                                 <span class="item-price">{{product.price}}</span>
                             </td>
-                            <td class="td-text-right"  >
+                            <td class="td-text-right">
                                 &#8353;
                                 <span class="item-total">{{product.price*product.quantity}}</span>
                             </td>
@@ -125,7 +129,7 @@
             <div class="total text-right bg-primary">
                 <h3>Total</h3>
                 <p class="text-right">&#8353;
-                    <span class="total"  >{{total}}</span>
+                    <span class="total">{{total}}</span>
                 </p>
             </div>
         </div>

@@ -32,7 +32,9 @@ angular.module('Authentication')
                         subsidiary: user.subsidiary,
                         authdata: authdata,
                         cashier: user.cashier,
-                        initial_time : user.initial_time
+                        initial_time : user.initial_time,
+                        initial_cash : user.initial_cash,
+                        company: user.company
                     },
                     usertem: user
                 };
