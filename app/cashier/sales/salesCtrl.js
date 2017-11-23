@@ -73,6 +73,78 @@ angular.module('newApp')
                                 if ($scope.total <= 0) {
                                     $route.reload();
                                 }
+                                else{
+                                    var date = new Date();
+                                    var month = Number(date.getMonth()) + 1;
+                                    var minutes = function () {
+                                        if (date.getMinutes() < 10) {
+                                            return '0' + date.getMinutes();
+                                        } else {
+                                            return date.getMinutes();
+                                        }
+                                    }
+                                    var aux_date = date.getFullYear() + "-" + month + "-" +
+                                        date.getDate() + "T" + date.getHours() + ":" + minutes() + ":" + "00";
+            
+                                        console.log("dt"+aux_date)
+                                    $scope.invoiceDate = +month + "/" +
+                                        date.getDate() + "/" + date.getFullYear() + " at " + date.getHours() + ":" + minutes() + ":" + "00";
+            
+                                    var client;
+                                    var payment_type;
+            
+                                    //Set client id
+                                    if ($scope.defaultClient || !$scope.idReady) {
+                                        client = '000000000';
+                                    } else {
+                                        client = $scope.userId;
+                                    }
+            
+                                    //Set payment type
+                                    if ($scope.creditCard) {
+                                        payment_type = 1;
+                                    } else {
+                                        payment_type = 2;
+                                    }
+            
+                                    //Delete products names and houses
+                                    var formattedProducts = [];
+                                    for (var i = 0; i < $scope.productList.length; i++) {
+                                        formattedProducts[i] = angular.copy($scope.productList[i]);
+                                        delete formattedProducts[i]["name"];
+                                        delete formattedProducts[i]["pharmaceutical_house"];
+                                    }
+            
+                                    var post_request = {
+                                        "id_sale": null,
+                                        "total": $scope.total,
+                                        "sale_date": aux_date,
+                                        "client": Number(client),
+                                        "payment_type": payment_type,
+                                        "employee": $rootScope.globals.currentUser.id,
+                                        "subsidiary": $rootScope.globals.currentUser.subsidiary,
+                                        "cash": $rootScope.globals.currentUser.cashier,
+                                        "medicines": formattedProducts
+                                    }
+            
+            
+                                    //Register in DB
+                                    console.log("pr" + JSON.stringify(post_request));
+                                    $http.post(config.ip + '/api/Sales', post_request)
+                                        .success(function (result) {
+                                            console.log(result);
+            
+            
+                                            $scope.invoiceNumber = result.id_inserted; //Get from DB 
+                                            $scope.readyToPrint = true;
+                                            icon.addClass("hide");
+            
+                                        })
+                                        .error(function (data, status) {
+                                            console.log(data);
+            
+                                        });
+                                }
                             })
                             .error(function (data, status) {
                                 console.log(data);
@@ -81,7 +153,7 @@ angular.module('newApp')
                     }
 
                     //Register sale
-                    if ($scope.total > 0) {
+                    if ($scope.total > 0 && !($scope.defaultClient == false && $scope.idReady && !$scope.clientExist)) {
 
                         var date = new Date();
                         var month = Number(date.getMonth()) + 1;
