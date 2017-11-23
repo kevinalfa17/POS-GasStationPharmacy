@@ -128,12 +128,12 @@
                                     </td>
                                     <td class="td-text-right">
                                         <a class="edit btn btn-sm btn-default" ng-click="edit($index,item.id_client,item.first_name, item.second_name, item.first_last_name, item.second_last_name, 
-                                    item.birthdate, item.phone, item.user_name)" ng-show="!editable($index)" href="javascript:;">
+                                    item.birthdate, item.phone, item.residence)" ng-show="!editable($index)" href="javascript:;">
                                             <i class="icon-note"></i>
                                         </a>
 
                                         <a class="edit btn btn-sm btn-success" ng-click="save($index,item.id_client,item.first_name, item.second_name, item.first_last_name, item.second_last_name, 
-                                    item.birthdate, item.phone, item.user_name,item.index)" ng-show="editable($index)" href="javascript:;">Save</a>
+                                    item.birthdate, item.phone, item.residence,item.index)" ng-show="editable($index)" href="javascript:;">Save</a>
                                         <a class="delete btn btn-sm btn-danger" ng-click="remove($index,item.index)" ng-show="!editable($index)" href="javascript:;">
                                             <i class="icons-office-52"></i>
                                         </a>

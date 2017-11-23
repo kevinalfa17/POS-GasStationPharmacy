@@ -11,13 +11,13 @@ angular.module('newApp')
                 if (!$scope.initialDate) {
                     $scope.initialDate = '2017-01-01T10:00:00.000'
                 } else {
-                    $scope.initialDate = $scope.initialDate + '00';
+                    //$scope.initialDate = $scope.initialDate + '00';
                 }
 
                 if (!$scope.finalDate) {
                     $scope.finalDate = '2017-01-01T10:00:00.000'
                 } else {
-                    $scope.finalDate = $scope.finalDate + '00';
+                    //$scope.finalDate = $scope.finalDate + '00';
                 }
 
                 $scope.company = $rootScope.globals.currentUser.company;

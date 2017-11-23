@@ -63,7 +63,7 @@ angular.module('newApp')
                     console.log("ic" + icon.hasClass("hide"));
                     icon.removeClass("hide")
                     //Register user
-                    if ($scope.defaultClient == false && $scope.idReady) {
+                    if ($scope.defaultClient == false && $scope.idReady && !$scope.clientExist) {
                         $scope.user.id_client = $scope.userId;
 
                         $http.post(config.ip + '/api/Clients', $scope.user)
@@ -106,7 +106,7 @@ angular.module('newApp')
                         if ($scope.defaultClient || !$scope.idReady) {
                             client = '000000000';
                         } else {
-                            client = userId;
+                            client = $scope.userId;
                         }
 
                         //Set payment type
